@@ -8,6 +8,24 @@ import pynput
 import threading
 import keyboard
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except Exception:
+        return False
+
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(
+        None,
+        "runas",
+        sys.executable,
+        os.path.abspath(__file__),
+        None,
+        1,
+    )
+    sys.exit()
+print(ctypes.windll.shell32.IsUserAnAdmin())
+
 mouse = pynput.mouse.Controller()
 inputkeyboard = pynput.keyboard.Controller()
 left = pynput.mouse.Button.left
@@ -171,6 +189,47 @@ def skk2az(fps):
     while time.perf_counter() - start < t:
         pass
 
+#n2q
+def skk2aq(fps):
+    start = time.perf_counter()
+
+    # Spam click chuột trái
+    for _ in range(int(0.26 * fps)):
+        if time.perf_counter() - start > 0.32:
+            break
+
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
+
+    # Đợi đến mốc đầu tiên
+    T_FPS = [
+        [60, 120, 220],
+        [0.44, 0.39, 0.37]
+    ]
+
+    t = fps2t(T_FPS, fps)
+
+    while time.perf_counter() - start < t:
+        pass
+
+    # Bấm Q đúng 1 frame
+    keyboard.press("q")
+    time.sleep(1 / fps)
+    keyboard.release("q")
+
+    time.sleep(1 / fps)
+
+    # Đợi đến mốc kết thúc
+    T_FPS = [
+        [60, 120, 220],
+        [1.17, 1.09, 1.07]
+    ]
+
+    t = fps2t(T_FPS, fps)
+
+    while time.perf_counter() - start < t:
+        pass
 
 def is_no_key_pressed():
     keys = [
@@ -184,6 +243,18 @@ def is_no_key_pressed():
     ]
 
     return not any(keyboard.is_pressed(key) for key in keys)
+
+def skke(fps):
+    start = time.perf_counter()
+    for _ in range(int(0.1 * fps)):
+        if time.perf_counter() - start > 0.1:
+            range(int(0.1 * fps))
+        else:
+            keyboard.press('e')
+            time.sleep(1 / fps)
+            keyboard.release('e')
+            time.sleep(1 / fps)
+    time.sleep(0.19)
 
 #BLOCK 223
 def skk223_loop(fps):
@@ -199,6 +270,56 @@ def skk223_loop(fps):
         if is_no_key_pressed():
             break
 
+def skk0eqa_220(fps):
+    skke(fps)
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2aq(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2az(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
 
 #Xử lý code chạy macro
 running = False
@@ -207,7 +328,7 @@ def worker():
     global running
 
     while running and keyboard.is_pressed("caps lock"):
-        skk223_loop(120)   # hoặc fps của bạn
+        skk0eqa_220(120)   # hoặc fps của bạn
 
     running = False
 
@@ -231,3 +352,4 @@ keyboard.on_press_key("caps lock", on_press)
 keyboard.on_release_key("caps lock", on_release)
 
 keyboard.wait()
+
