@@ -291,14 +291,7 @@ def skk5as(fps):
     t = fps2t(T_FPS, fps)
     while time.perf_counter() - start < t + 2 / fps:
         pass
-    mouse.press(right)
-    time.sleep(1 / fps)
-    mouse.release(right)
-    time.sleep(1 / fps)
-    keyboard.press('w')
-    time.sleep(1 / fps)
-    keyboard.release('w')
-    time.sleep(1 / fps)
+    
     T_FPS = [
         [
             60,
