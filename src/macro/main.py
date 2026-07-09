@@ -144,9 +144,7 @@ def skk2as(fps):
     time.sleep(1 / fps)
     mouse.release(right)
 
-    time.sleep(1 / fps)
-    time.sleep(1 / fps)
-    time.sleep(1 / fps)
+    time.sleep(1 / (1.2*fps))
 
     t = fps2t([
         [60, 120, 220],
@@ -188,6 +186,130 @@ def skk2az(fps):
 
     while time.perf_counter() - start < t:
         pass
+
+def skk2azs(fps):
+    start = time.perf_counter()
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            0.24,
+            0.22,
+            0.2]]
+    t = fps2t(T_FPS, fps)
+    for _ in range(int(0.2 * fps)):
+        if time.perf_counter() - start > t:
+            range(int(0.2 * fps))
+        else:
+            mouse.press(left)
+            mouse.release(left)
+            time.sleep(2 / fps)
+    while time.perf_counter() - start < t + 2 / fps:
+        pass
+    mouse.press(left)
+    time.sleep(0.44)
+    mouse.release(left)
+    time.sleep(1 / fps)
+    mouse.press(right)
+    time.sleep(1 / fps)
+    mouse.release(right)
+    time.sleep(1 / fps)
+    keyboard.press('w')
+    time.sleep(1 / fps)
+    keyboard.release('w')
+    time.sleep(1 / fps)
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            0.9,
+            0.86,
+            0.82]]
+    t = fps2t(T_FPS, fps)
+    while time.perf_counter() - start < t:
+        pass
+    return None
+
+
+
+def skk2azs_slow(fps):
+    if fps < 105:
+        skk2azs(fps)
+        return None
+    start = time.perf_counter()
+    for _ in range(int(0.2 * fps)):
+        if time.perf_counter() - start > 0.26:
+            range(int(0.2 * fps))
+        else:
+            mouse.press(left)
+            mouse.release(left)
+            time.sleep(2 / fps)
+    while time.perf_counter() - start < 0.28:
+        pass
+    mouse.press(left)
+    time.sleep(0.44)
+    mouse.release(left)
+    time.sleep(1 / fps)
+    while time.perf_counter() - start < 0.725:
+        pass
+    mouse.press(right)
+    time.sleep(1 / fps)
+    mouse.release(right)
+    time.sleep(1 / fps)
+    keyboard.press('w')
+    time.sleep(1 / fps)
+    keyboard.release('w')
+    time.sleep(1 / fps)
+    while time.perf_counter() - start < 0.87:
+        pass
+        return None
+
+def skk5as(fps):
+    start = time.perf_counter()
+    for _ in range(int(2 * fps)):
+        if time.perf_counter() - start > 2.1:
+            range(int(2 * fps))
+        else:
+            mouse.press(left)
+            mouse.release(left)
+            time.sleep(2 / fps)
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            2.22,
+            2.14,
+            2.12]]
+    t = fps2t(T_FPS, fps)
+    while time.perf_counter() - start < t + 2 / fps:
+        pass
+    mouse.press(right)
+    time.sleep(1 / fps)
+    mouse.release(right)
+    time.sleep(1 / fps)
+    keyboard.press('w')
+    time.sleep(1 / fps)
+    keyboard.release('w')
+    time.sleep(1 / fps)
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            2.41,
+            2.28,
+            2.24]]
+    t = fps2t(T_FPS, fps)
+    while time.perf_counter() - start < t + 2 / fps:
+        pass
+    return None
 
 #n2q
 def skk2aq(fps):
@@ -299,13 +421,7 @@ def skk0eqa_220(fps):
     skk2as(fps)
     if is_no_key_pressed():
         return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2az(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
+    skk2azs_slow(fps)
     if is_no_key_pressed():
         return None
     skk2as(fps)
@@ -317,9 +433,9 @@ def skk0eqa_220(fps):
     skk2as(fps)
     if is_no_key_pressed():
         return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
+    skk5as(fps)
+
+
 
 #Xử lý code chạy macro
 running = False
