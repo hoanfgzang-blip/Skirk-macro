@@ -6,7 +6,6 @@ import json
 import os
 import pynput
 import threading
-import keyboard
 
 def is_admin():
     try:
@@ -27,9 +26,12 @@ if not is_admin():
 print(ctypes.windll.shell32.IsUserAnAdmin())
 
 mouse = pynput.mouse.Controller()
-inputkeyboard = pynput.keyboard.Controller()
+keyboard = pynput.keyboard.Controller()
 left = pynput.mouse.Button.left
 right = pynput.mouse.Button.right
+
+FPSinput = 120
+keyinput = "caps_lock"
 
 # NỘI SUY FPS => ĐỘ TRỄ
 # T_FPS = [
@@ -106,7 +108,7 @@ def skk3aw(fps):
         mouse.release(left)
         time.sleep(2 / fps)
 
-    inputkeyboard.press("w")
+    keyboard.press("w")
 
     T_FPS = [
         [30, 60, 100, 120, 220],
@@ -118,7 +120,7 @@ def skk3aw(fps):
     while time.perf_counter() - start < t:
         pass
 
-    inputkeyboard.release("w")
+    keyboard.release("w")
 
 #n2d
 def skk2as(fps):
@@ -354,15 +356,7 @@ def skk2aq(fps):
         pass
 
 def is_no_key_pressed():
-    keys = [
-        "caps lock",
-        "w",
-        "a",
-        "s",
-        "d",
-        "left",
-        "right"
-    ]
+    return target not in pressed
 
     return not any(keyboard.is_pressed(key) for key in keys)
 
@@ -438,34 +432,57 @@ def skk0eqa_220(fps):
 
 
 #Xử lý code chạy macro
+import threading
+from pynput import keyboard as kb
+from pynput import mouse as ms
+from pynput.keyboard import Key, KeyCode
+from pynput.mouse import Button
+
+pressed = set()
 running = False
+
+def parse_input(name):
+    if hasattr(Button, name):
+        return getattr(Button, name)
+    if hasattr(Key, name):
+        return getattr(Key, name)
+    if len(name) == 1:
+        return KeyCode.from_char(name.lower())
+    raise ValueError(f"Unknown key: {name}")
+
+target = parse_input(keyinput)
 
 def worker():
     global running
+    while running:
+        skk0eqa_220(FPSinput)
 
-    while running and keyboard.is_pressed("caps lock"):
-        skk0eqa_220(120)   # hoặc fps của bạn
-
-    running = False
-
-
-def on_press(event):
+def on_press(key):
     global running
+    pressed.add(key)
+    if target in pressed and not running:
+        running = True
+        threading.Thread(target=worker, daemon=True).start()
 
-    if running:
-        return
-
-    running = True
-    threading.Thread(target=worker, daemon=True).start()
-
-
-def on_release(event):
+def on_release(key):
     global running
-    running = False
+    pressed.discard(key)
+    if target not in pressed:
+        running = False
 
+def on_click(x, y, button, is_pressed):
+    global running
+    if is_pressed:
+        pressed.add(button)
+        if target in pressed and not running:
+            running = True
+            threading.Thread(target=worker, daemon=True).start()
+    else:
+        pressed.discard(button)
+        if target not in pressed:
+            running = False
 
-keyboard.on_press_key("caps lock", on_press)
-keyboard.on_release_key("caps lock", on_release)
+kb.Listener(on_press=on_press,on_release=on_release).start()
+ms.Listener(on_click=on_click).start()
 
-keyboard.wait()
-
+threading.Event().wait()
