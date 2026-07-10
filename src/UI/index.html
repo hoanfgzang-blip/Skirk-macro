@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skirk Macro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="logo">
+        <img src="logo.png" alt="Logo">
+    </div>
+
+    <div class="scrolldown">
+        <label for="chooseTb">Chọn 1 combo</label>
+        <select name="Combo" id="chooseTb"></select>
+    </div>
+
+    <!-- NEW: Bind Key Widget -->
+    <div class="bind-key-section">
+        <label class="bind-key-label" for="bindKeyBtn">Sign Key (bind key)</label>
+        <div class="bind-key-row">
+            <button id="bindKeyBtn" class="bind-key-btn" type="button">Click to bind a key...</button>
+            <span id="savedKeyBadge" class="saved-key-badge" style="display:none;"></span>
+        </div>
+    </div>
+
+    <div class="button">
+        <button id="saveBtn" type="button">SAVE</button>
+    </div>
+
+    
+
+    <script src="./fe.js"></script>
+</body>
+</html>

@@ -6,6 +6,7 @@ import json
 import os
 import pynput
 import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 def is_admin():
     try:
@@ -32,6 +33,26 @@ right = pynput.mouse.Button.right
 
 FPSinput = 120
 keyinput = "caps_lock"
+
+# ── Config file (giao tiếp với frontend) ────────────────────────────────────
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+DEFAULT_CONFIG = {
+    "combo": "22q223 223 22cd23 25",
+    "bind_key": keyinput
+}
+
+def load_config():
+    if os.path.exists(CONFIG_PATH):
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return DEFAULT_CONFIG.copy()
+
+def save_config(data):
+    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 # NỘI SUY FPS => ĐỘ TRỄ
 # T_FPS = [
@@ -203,11 +224,10 @@ def skk2azs(fps):
     t = fps2t(T_FPS, fps)
     for _ in range(int(0.2 * fps)):
         if time.perf_counter() - start > t:
-            range(int(0.2 * fps))
-        else:
-            mouse.press(left)
-            mouse.release(left)
-            time.sleep(2 / fps)
+            break
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
     while time.perf_counter() - start < t + 2 / fps:
         pass
     mouse.press(left)
@@ -245,11 +265,10 @@ def skk2azs_slow(fps):
     start = time.perf_counter()
     for _ in range(int(0.2 * fps)):
         if time.perf_counter() - start > 0.26:
-            range(int(0.2 * fps))
-        else:
-            mouse.press(left)
-            mouse.release(left)
-            time.sleep(2 / fps)
+            break
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
     while time.perf_counter() - start < 0.28:
         pass
     mouse.press(left)
@@ -268,17 +287,16 @@ def skk2azs_slow(fps):
     time.sleep(1 / fps)
     while time.perf_counter() - start < 0.87:
         pass
-        return None
+    return None
 
 def skk5as(fps):
     start = time.perf_counter()
     for _ in range(int(2 * fps)):
         if time.perf_counter() - start > 2.1:
-            range(int(2 * fps))
-        else:
-            mouse.press(left)
-            mouse.release(left)
-            time.sleep(2 / fps)
+            break
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
     T_FPS = [
         [
             60,
@@ -351,18 +369,15 @@ def skk2aq(fps):
 def is_no_key_pressed():
     return target not in pressed
 
-    return not any(keyboard.is_pressed(key) for key in keys)
-
 def skke(fps):
     start = time.perf_counter()
     for _ in range(int(0.1 * fps)):
         if time.perf_counter() - start > 0.1:
-            range(int(0.1 * fps))
-        else:
-            keyboard.press('e')
-            time.sleep(1 / fps)
-            keyboard.release('e')
-            time.sleep(1 / fps)
+            break
+        keyboard.press('e')
+        time.sleep(1 / fps)
+        keyboard.release('e')
+        time.sleep(1 / fps)
     time.sleep(0.19)
 
 #BLOCK 223
@@ -379,7 +394,7 @@ def skk223_loop(fps):
         if is_no_key_pressed():
             break
 
-def skk0eqa_220(fps):
+def skk0eqa_223_225(fps):
     skke(fps)
     skk2as(fps)
     if is_no_key_pressed():
@@ -422,10 +437,104 @@ def skk0eqa_220(fps):
         return None
     skk5as(fps)
 
+def skk0eqa_main(fps):
+    skke(fps)
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2aq(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2az(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
 
+def skk0qea(fps):
+    skke(fps)
+    if is_no_key_pressed():
+        return None
+    skk2azs(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2azs_slow(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+
+# ── Combo map: chuỗi frontend → hàm Python ──────────────────────────────────
+COMBO_MAP = {
+    "22q223 223 22cd23 25":        skk0eqa_223_225,
+    "222q 223 223 22c3 223 3":     skk0eqa_main,
+    "qe 2cd23 223 223 2cd23 222":  skk0qea,
+}
+
+active_combo_fn = skk0eqa_223_225  # mặc định, sẽ cập nhật từ config
 
 #Xử lý code chạy macro
-import threading
 from pynput import keyboard as kb
 from pynput import mouse as ms
 from pynput.keyboard import Key, KeyCode
@@ -443,12 +552,56 @@ def parse_input(name):
         return KeyCode.from_char(name.lower())
     raise ValueError(f"Unknown key: {name}")
 
-target = parse_input(keyinput)
+# ── apply_config: cập nhật target + active_combo_fn ─────────────────────────
+def apply_config(cfg):
+    global target, active_combo_fn
+    target = parse_input(cfg.get("bind_key", keyinput))
+    active_combo_fn = COMBO_MAP.get(cfg.get("combo"), skk0eqa_223_225)
+
+# ── HTTP Server để nhận config từ frontend ────────────────────────────────────
+class ConfigHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        if self.path == "/save":
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                body = json.loads(self.rfile.read(length))
+                save_config(body)
+                apply_config(body)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(b'{"ok": true}')
+            except Exception:
+                self.send_response(500)
+                self.end_headers()
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
+    def log_message(self, *args):
+        pass
+
+def start_http_server():
+    server = HTTPServer(("localhost", 5000), ConfigHandler)
+    server.serve_forever()
+
+# ── Khởi tạo target + active_combo_fn từ config (mục 1 — đã được phép) ───────
+_cfg = load_config()
+active_combo_fn = COMBO_MAP.get(_cfg.get("combo"), skk0eqa_223_225)
+target = parse_input(_cfg.get("bind_key", keyinput))
 
 def worker():
     global running
     while running:
-        skk0eqa_220(FPSinput)
+        active_combo_fn(FPSinput)  # mục 2 — đã được phép
 
 def on_press(key):
     global running
@@ -478,4 +631,5 @@ def on_click(x, y, button, is_pressed):
 kb.Listener(on_press=on_press,on_release=on_release).start()
 ms.Listener(on_click=on_click).start()
 
+threading.Thread(target=start_http_server, daemon=True).start()
 threading.Event().wait()

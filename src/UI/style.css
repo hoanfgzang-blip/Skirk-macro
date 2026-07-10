@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    min-height: 100vh;
+    font-family: sans-serif;
+}
+
+.logo {
+    position: absolute;
+    top: 100px;
+    left: 400px;
+    color: white;
+    font-size: 50px;
+}
+
+.scrolldown {
+    position: absolute;
+    top: 400px;
+    left: 400px;
+    color: white;
+    font-size: 20px;
+}
+
+.scrolldown select {
+    display: block;
+    margin-top: 8px;
+    min-width: 320px;
+    padding: 6px 8px;
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border: 1px solid rgb(0, 141, 141);
+    font-size: 16px;
+}
+
+.button button {
+    background-color: rgb(0, 141, 141);
+    color: white;
+    font-size: 15px;
+    padding: 8px 16px;
+    position: absolute;
+    top: 500px;
+    left: 400px;
+}
+
+
+/* NEW: Bind Key Widget */
+.bind-key-section {
+    position: absolute;
+    top: 455px;
+    left: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bind-key-label {
+    color: rgb(0, 180, 180);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bind-key-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Default / idle state */
+.bind-key-btn {
+    background-color: rgb(20, 20, 20);
+    color: rgb(160, 160, 160);
+    border: 1px dashed rgb(80, 80, 80);
+    font-size: 13px;
+    padding: 5px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    transition: all 0.2s ease;
+    min-width: 200px;
+    text-align: left;
+}
+
+/* Listening for key press */
+.bind-key-btn.bind-key-listening {
+    background-color: rgb(40, 20, 0);
+    color: rgb(255, 180, 0);
+    border: 1px solid rgb(255, 180, 0);
+    animation: pulse-listen 0.8s ease-in-out infinite alternate;
+}
+
+/* Key captured (pending save) */
+.bind-key-btn.bind-key-captured {
+    background-color: rgb(0, 40, 40);
+    color: rgb(0, 220, 220);
+    border: 1px solid rgb(0, 141, 141);
+}
+
+@keyframes pulse-listen {
+    from { box-shadow: 0 0 0px rgb(255, 180, 0); }
+    to   { box-shadow: 0 0 8px rgb(255, 180, 0); }
+}
+
+/* Saved badge shown after save */
+.saved-key-badge {
+    background-color: rgb(0, 60, 0);
+    color: rgb(80, 220, 80);
+    border: 1px solid rgb(0, 160, 0);
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+}
