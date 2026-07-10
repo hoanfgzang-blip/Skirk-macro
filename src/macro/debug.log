@@ -1,0 +1,284 @@
+[2026-07-11 02:21:15] apply_all_bindings called with: {'qe 2cd23 223 223 2cd23 222': 'v', '222q 223 223 22c3 223 3': 'caps_lock', 'Combo gảy chan': 'mouse_4'}
+[2026-07-11 02:21:15] Combo not found in COMBO_MAP: qe 2cd23 223 223 2cd23 222
+[2026-07-11 02:21:15] Combo not found in COMBO_MAP: 222q 223 223 22c3 223 3
+[2026-07-11 02:21:15] parse_input: mouse_4
+[2026-07-11 02:21:15] Bound: Button.x2 -> skk0e2aq
+[2026-07-11 02:21:16] on_click (press): Button.x2 (run_enabled=False)
+[2026-07-11 02:21:17] on_click (release): Button.x2
+[2026-07-11 02:21:18] on_click (press): Button.x2 (run_enabled=False)
+[2026-07-11 02:21:18] on_click (release): Button.x2
+[2026-07-11 02:21:18] on_click (press): Button.x2 (run_enabled=False)
+[2026-07-11 02:21:18] on_click (release): Button.x2
+[2026-07-11 02:21:18] on_click (press): Button.x2 (run_enabled=False)
+[2026-07-11 02:21:18] on_click (release): Button.x2
+[2026-07-11 02:21:19] on_click (press): Button.x1 (run_enabled=False)
+[2026-07-11 02:21:19] on_click (release): Button.x1
+[2026-07-11 02:21:19] on_click (press): Button.x1 (run_enabled=False)
+[2026-07-11 02:21:19] on_click (release): Button.x1
+[2026-07-11 02:21:19] on_click (press): Button.x1 (run_enabled=False)
+[2026-07-11 02:21:20] on_click (release): Button.x1
+[2026-07-11 02:21:20] on_click (press): Button.x2 (run_enabled=False)
+[2026-07-11 02:21:20] on_click (release): Button.x2
+[2026-07-11 02:21:22] on_click (press): Button.left (run_enabled=False)
+[2026-07-11 02:21:22] on_click (release): Button.left
+[2026-07-11 02:21:23] on_click (press): Button.left (run_enabled=False)
+[2026-07-11 02:21:23] on_click (release): Button.left
+[2026-07-11 02:21:25] on_click (press): Button.left (run_enabled=False)
+[2026-07-11 02:21:25] on_click (release): Button.left
+[2026-07-11 02:21:25] POST request received on: /run
+[2026-07-11 02:21:25] POST body: {'enabled': True}
+[2026-07-11 02:21:25] run_enabled toggled to: True
+[2026-07-11 02:21:26] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:26] on_click (release): Button.left
+[2026-07-11 02:21:26] on_click (press): Button.x2 (run_enabled=True)
+[2026-07-11 02:21:26] Trigger worker for target button: Button.x2
+[2026-07-11 02:21:26] Worker thread started for key: Button.x2
+[2026-07-11 02:21:26] Worker: executing skk0e2aq
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:26] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:26] on_release: 'e'
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:27] on_click (release): Button.left
+[2026-07-11 02:21:27] on_click (release): Button.x2
+[2026-07-11 02:21:27] on_press: 'q' (run_enabled=True)
+[2026-07-11 02:21:27] on_release: 'q'
+[2026-07-11 02:21:27] on_click (press): Button.x2 (run_enabled=True)
+[2026-07-11 02:21:28] Trigger worker for target button: Button.x2
+[2026-07-11 02:21:28] Worker thread started for key: Button.x2
+[2026-07-11 02:21:28] Worker: executing skk0e2aq
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_press: 'e' (run_enabled=True)
+[2026-07-11 02:21:28] on_release: 'e'
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (press): Button.right (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (release): Button.right
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:28] on_press: 'q' (run_enabled=True)
+[2026-07-11 02:21:28] on_click (release): Button.left
+[2026-07-11 02:21:28] on_release: 'q'
+[2026-07-11 02:21:28] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.right (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.right
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:29] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:29] on_click (press): Button.right (run_enabled=True)
+[2026-07-11 02:21:29] on_click (release): Button.left
+[2026-07-11 02:21:30] on_click (release): Button.x2
+[2026-07-11 02:21:30] on_click (release): Button.right
+[2026-07-11 02:21:30] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:30] on_click (release): Button.left
+[2026-07-11 02:21:30] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:30] Worker: finished executing skk0e2aq
+[2026-07-11 02:21:30] Worker thread stopped for key: Button.x2
+[2026-07-11 02:21:30] on_click (release): Button.left
+[2026-07-11 02:21:30] on_press: 'w' (run_enabled=True)
+[2026-07-11 02:21:30] on_release: 'w'
+[2026-07-11 02:21:30] Worker: finished executing skk0e2aq
+[2026-07-11 02:21:30] Worker thread stopped for key: Button.x2
+[2026-07-11 02:21:31] on_click (press): Button.left (run_enabled=True)
+[2026-07-11 02:21:31] on_click (release): Button.left

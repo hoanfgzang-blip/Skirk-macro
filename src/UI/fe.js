@@ -28,6 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
         chooseTb.value = savedCombo
     }
 
+    const fpsInput = document.getElementById("FPS")
+    if (fpsInput) {
+        fpsInput.value = LoadFPS()
+    }
+
     function LoadFPS() {
         const savedFPS = localStorage.getItem(FPS_STORAGE)
         if (savedFPS) {

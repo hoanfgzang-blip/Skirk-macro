@@ -405,7 +405,7 @@ def skk223_loop(fps):
             break
 
 def skk0eqa_223_225(fps):
-    print('Macro đang chạy với FPS:', fps)
+    log_debug(f"Macro running with FPS: {fps}")
     skke(fps)
     skk2as(fps)
     if is_no_key_pressed():
@@ -449,7 +449,7 @@ def skk0eqa_223_225(fps):
     skk5as(fps)
 
 def skk0eqa_main(fps):
-    print('Macro đang chạy với FPS:', FPSinput)
+    log_debug(f"Macro running with FPS: {FPSinput}")
     skke(fps)
     skk2as(fps)
     if is_no_key_pressed():
@@ -499,7 +499,7 @@ def skk0eqa_main(fps):
     skk3aw(fps)
 
 def skk0qea(fps):
-    print('Macro đang chạy với FPS:', FPSinput)
+    log_debug(f"Macro running with FPS: {FPSinput}")
     skke(fps)
     if is_no_key_pressed():
         return None
@@ -551,7 +551,7 @@ def skk0qea(fps):
     skk3aw(fps)
 
 def skk0e2aq(fps):
-    print('Macro đang chạy với FPS:', FPSinput)
+    log_debug(f"Macro running with FPS: {FPSinput}")
     skke(fps)
     if is_no_key_pressed():
         return None
@@ -624,7 +624,19 @@ from pynput.mouse import Button
 
 pressed = set()
 
+# ── Logging để debug ──────────────────────────────────────────────────────────
+DEBUG_LOG_PATH = os.path.join(os.path.dirname(CONFIG_PATH), "debug.log")
+
+def log_debug(msg):
+    try:
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        with open(DEBUG_LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] {msg}\n")
+    except Exception:
+        pass
+
 def parse_input(name):
+    log_debug(f"parse_input: {name}")
     if name == "mouse_4":
         return Button.x2
     if name == "mouse_3":
@@ -645,6 +657,7 @@ def parse_input(name):
 def apply_all_bindings(sign_keys_map):
     """Nhận dict { combo_str: key_name } → build active_bindings."""
     global active_bindings, running_states
+    log_debug(f"apply_all_bindings called with: {sign_keys_map}")
     for key in list(running_states):
         running_states[key] = False
     active_bindings = {}
@@ -652,24 +665,30 @@ def apply_all_bindings(sign_keys_map):
     for combo_str, key_name in sign_keys_map.items():
         fn = COMBO_MAP.get(combo_str)
         if fn is None:
+            log_debug(f"Combo not found in COMBO_MAP: {combo_str}")
             continue
         try:
-            active_bindings[parse_input(key_name)] = fn
-        except Exception:
-            pass
+            parsed = parse_input(key_name)
+            active_bindings[parsed] = fn
+            log_debug(f"Bound: {parsed} -> {fn.__name__}")
+        except Exception as e:
+            log_debug(f"Error binding {key_name}: {e}")
 
 # Hàm nhập FPS từ config.json
 def get_fps():
     global FPSinput
     FPSinput = load_config().get("FPS", 120)
+    log_debug(f"FPS set to: {FPSinput}")
 
 # ── HTTP Server để nhận config từ frontend ────────────────────────────────────
 class ConfigHandler(BaseHTTPRequestHandler):
     def do_POST(self):
+        log_debug(f"POST request received on: {self.path}")
         if self.path in ("/save", "/run", "/shutdown"):
             try:
                 length = int(self.headers.get("Content-Length", 0))
                 body = json.loads(self.rfile.read(length)) if length > 0 else {}
+                log_debug(f"POST body: {body}")
                 if self.path == "/save":
                     save_config(body)
                     apply_all_bindings(body.get("comboSignKeys", {}))
@@ -677,6 +696,7 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 elif self.path == "/run":
                     global run_enabled
                     run_enabled = bool(body.get("enabled", False))
+                    log_debug(f"run_enabled toggled to: {run_enabled}")
                     if not run_enabled:
                         for key in list(running_states):
                             running_states[key] = False
@@ -686,6 +706,7 @@ class ConfigHandler(BaseHTTPRequestHandler):
                     self.send_header("Access-Control-Allow-Origin", "*")
                     self.end_headers()
                     self.wfile.write(b'{"ok": true}')
+                    log_debug("Shutdown command received, exiting process.")
                     threading.Thread(target=lambda: os._exit(0), daemon=True).start()
                     return
                 self.send_response(200)
@@ -720,23 +741,37 @@ apply_all_bindings(_cfg.get("comboSignKeys", {}))
 
 def worker(key):
     _thread_local.bind_key = key
+    log_debug(f"Worker thread started for key: {key}")
     while running_states.get(key, False):
         fn = active_bindings.get(key)
         if fn is None:
+            log_debug(f"Worker: no function bound to {key}")
             break
-        fn(FPSinput)
+        try:
+            log_debug(f"Worker: executing {fn.__name__}")
+            fn(FPSinput)
+            log_debug(f"Worker: finished executing {fn.__name__}")
+        except Exception as e:
+            log_debug(f"Worker Exception running {fn.__name__}: {e}")
+            import traceback
+            log_debug(traceback.format_exc())
+            break
+    log_debug(f"Worker thread stopped for key: {key}")
 
 def on_press(key):
     pressed.add(key)
+    log_debug(f"on_press: {key} (run_enabled={run_enabled})")
     if not run_enabled:
         return
     for tgt in list(active_bindings):
         if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
             running_states[tgt] = True
+            log_debug(f"Trigger worker for target key: {tgt}")
             threading.Thread(target=worker, args=(tgt,), daemon=True).start()
 
 def on_release(key):
     pressed.discard(key)
+    log_debug(f"on_release: {key}")
     for tgt in list(active_bindings):
         if not any(tgt == k for k in pressed):
             running_states[tgt] = False
@@ -744,14 +779,17 @@ def on_release(key):
 def on_click(x, y, button, is_pressed):
     if is_pressed:
         pressed.add(button)
+        log_debug(f"on_click (press): {button} (run_enabled={run_enabled})")
         if not run_enabled:
             return
         for tgt in list(active_bindings):
             if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
                 running_states[tgt] = True
+                log_debug(f"Trigger worker for target button: {tgt}")
                 threading.Thread(target=worker, args=(tgt,), daemon=True).start()
     else:
         pressed.discard(button)
+        log_debug(f"on_click (release): {button}")
         for tgt in list(active_bindings):
             if not any(tgt == k for k in pressed):
                 running_states[tgt] = False
