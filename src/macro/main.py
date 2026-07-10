@@ -174,7 +174,7 @@ def skk2as(fps):
     time.sleep(1 / fps)
     mouse.release(right)
 
-    time.sleep(1 / (1.2*fps))
+    time.sleep(1 / fps)
 
     t = fps2t([
         [60, 120, 220],
@@ -405,6 +405,7 @@ def skk223_loop(fps):
             break
 
 def skk0eqa_223_225(fps):
+    print('Macro đang chạy với FPS:', fps)
     skke(fps)
     skk2as(fps)
     if is_no_key_pressed():
@@ -448,6 +449,7 @@ def skk0eqa_223_225(fps):
     skk5as(fps)
 
 def skk0eqa_main(fps):
+    print('Macro đang chạy với FPS:', FPSinput)
     skke(fps)
     skk2as(fps)
     if is_no_key_pressed():
@@ -497,6 +499,7 @@ def skk0eqa_main(fps):
     skk3aw(fps)
 
 def skk0qea(fps):
+    print('Macro đang chạy với FPS:', FPSinput)
     skke(fps)
     if is_no_key_pressed():
         return None
@@ -548,6 +551,7 @@ def skk0qea(fps):
     skk3aw(fps)
 
 def skk0e2aq(fps):
+    print('Macro đang chạy với FPS:', FPSinput)
     skke(fps)
     if is_no_key_pressed():
         return None
@@ -575,7 +579,7 @@ def skk0e2aq(fps):
     skk2as(fps)
     if is_no_key_pressed():
         return None
-    skk2az(fps)
+    skk2azs(fps)
     if is_no_key_pressed():
         return None
     skk3aw(fps)
@@ -654,6 +658,11 @@ def apply_all_bindings(sign_keys_map):
         except Exception:
             pass
 
+# Hàm nhập FPS từ config.json
+def get_fps():
+    global FPSinput
+    FPSinput = load_config().get("FPS", 120)
+
 # ── HTTP Server để nhận config từ frontend ────────────────────────────────────
 class ConfigHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -664,6 +673,7 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 if self.path == "/save":
                     save_config(body)
                     apply_all_bindings(body.get("comboSignKeys", {}))
+                    get_fps()
                 elif self.path == "/run":
                     global run_enabled
                     run_enabled = bool(body.get("enabled", False))
@@ -748,6 +758,8 @@ def on_click(x, y, button, is_pressed):
 
 kb.Listener(on_press=on_press,on_release=on_release).start()
 ms.Listener(on_click=on_click).start()
+
+
 
 threading.Thread(target=start_http_server, daemon=True).start()
 threading.Event().wait()
