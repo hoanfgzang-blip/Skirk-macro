@@ -1,16 +1,18 @@
 const chooseCombo = [
-    "22q223 223 22cd23 25",
-    "222q 223 223 22c3 223 3",
-    "qe 2cd23 223 223 2cd23 222",
+    "Combo gảy chan",
+    "C0:22q223 223 22cd23 25",
+    "C0:222q 223 223 22c3 223 3",
+    "C0:qe 2cd23 223 223 2cd23 222",
 ]
 
 const STORAGE_KEY = "selectedCombo"
 const SIGN_KEY_STORAGE = "comboSignKeys" // NEW: { comboValue: "KeyName", ... }
+const FPS_STORAGE = "FPS" // NEW: store FPS value
 
 document.addEventListener("DOMContentLoaded", () => {
-    const chooseTb      = document.getElementById("chooseTb")
-    const saveBtn       = document.getElementById("saveBtn")
-    const bindKeyBtn    = document.getElementById("bindKeyBtn")    // NEW
+    const chooseTb = document.getElementById("chooseTb")
+    const saveBtn = document.getElementById("saveBtn")
+    const bindKeyBtn = document.getElementById("bindKeyBtn")    // NEW
     const savedKeyBadge = document.getElementById("savedKeyBadge") // NEW
 
     // ── Populate combo dropdown ──────────────────────────────────────────────
@@ -24,6 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedCombo = localStorage.getItem(STORAGE_KEY)
     if (savedCombo && chooseCombo.includes(savedCombo)) {
         chooseTb.value = savedCombo
+    }
+
+    function LoadFPS() {
+        const savedFPS = localStorage.getItem(FPS_STORAGE)
+        if (savedFPS) {
+            return parseInt(savedFPS, 10)
+        }
+        return 120 // default FPS
     }
 
     // ── NEW: Sign Key (bind key) helpers ─────────────────────────────────────
@@ -47,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /** Update the capture button text and the saved badge for current combo */
     function refreshBindUI() {
-        const map  = loadSignKeys()
+        const map = loadSignKeys()
         const combo = chooseTb.value
         const saved = map[combo]
 
@@ -85,64 +95,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ── Keyboard: map browser e.code → pynput Key enum name ─────────────
-const codeMap = {
-    // Modifier keys
-    "ShiftLeft":     "shift",
-    "ShiftRight":    "shift_r",
-    "ControlLeft":   "ctrl",
-    "ControlRight":  "ctrl_r",
-    "AltLeft":       "alt",
-    "AltRight":      "alt_gr",
-    "MetaLeft":      "cmd",
-    "MetaRight":     "cmd_r",
+        const codeMap = {
+            // Modifier keys
+            "ShiftLeft": "shift",
+            "ShiftRight": "shift_r",
+            "ControlLeft": "ctrl",
+            "ControlRight": "ctrl_r",
+            "AltLeft": "alt",
+            "AltRight": "alt_gr",
+            "MetaLeft": "cmd",
+            "MetaRight": "cmd_r",
 
-    // Toggle keys
-    "CapsLock":      "caps_lock",
-    "NumLock":       "num_lock",
-    "ScrollLock":    "scroll_lock",
+            // Toggle keys
+            "CapsLock": "caps_lock",
+            "NumLock": "num_lock",
+            "ScrollLock": "scroll_lock",
 
-    // Whitespace / editing
-    "Space":         "space",
-    "Enter":         "enter",
-    "Backspace":     "backspace",
-    "Tab":           "tab",
-    "Escape":        "esc",
-    "Delete":        "delete",
-    "Insert":        "insert",
+            // Whitespace / editing
+            "Space": "space",
+            "Enter": "enter",
+            "Backspace": "backspace",
+            "Tab": "tab",
+            "Escape": "esc",
+            "Delete": "delete",
+            "Insert": "insert",
 
-    // Navigation
-    "Home":          "home",
-    "End":           "end",
-    "PageUp":        "page_up",
-    "PageDown":      "page_down",
-    "ArrowUp":       "up",
-    "ArrowDown":     "down",
-    "ArrowLeft":     "left",
-    "ArrowRight":    "right",
+            // Navigation
+            "Home": "home",
+            "End": "end",
+            "PageUp": "page_up",
+            "PageDown": "page_down",
+            "ArrowUp": "up",
+            "ArrowDown": "down",
+            "ArrowLeft": "left",
+            "ArrowRight": "right",
 
-    // System
-    "PrintScreen":   "print_screen",
-    "Pause":         "pause",
+            // System
+            "PrintScreen": "print_screen",
+            "Pause": "pause",
 
-    // Function keys F1–F20
-    "F1":"f1","F2":"f2","F3":"f3","F4":"f4","F5":"f5",
-    "F6":"f6","F7":"f7","F8":"f8","F9":"f9","F10":"f10",
-    "F11":"f11","F12":"f12","F13":"f13","F14":"f14","F15":"f15",
-    "F16":"f16","F17":"f17","F18":"f18","F19":"f19","F20":"f20",
+            // Function keys F1–F20
+            "F1": "f1", "F2": "f2", "F3": "f3", "F4": "f4", "F5": "f5",
+            "F6": "f6", "F7": "f7", "F8": "f8", "F9": "f9", "F10": "f10",
+            "F11": "f11", "F12": "f12", "F13": "f13", "F14": "f14", "F15": "f15",
+            "F16": "f16", "F17": "f17", "F18": "f18", "F19": "f19", "F20": "f20",
 
-    // Mouse side buttons
-    "MouseBack":     "x1",
-    "MouseForward":  "x2",
-};
+            // Mouse side buttons
+            "MouseBack": "x1",
+            "MouseForward": "x2",
+        };
 
         if (codeMap[e.code]) return codeMap[e.code]
 
         // ── Regular character keys: KeyA→"a", Digit1→"1" ────────────────────
-        if (/^Key[A-Z]$/.test(e.code))   return e.code[3].toLowerCase()  // "KeyA" → "a"
+        if (/^Key[A-Z]$/.test(e.code)) return e.code[3].toLowerCase()  // "KeyA" → "a"
         if (/^Digit[0-9]$/.test(e.code)) return e.code[5]                // "Digit3" → "3"
 
         // ── Numpad ───────────────────────────────────────────────────────────
-        if (/^Numpad\d$/.test(e.code))   return e.code[6]                // "Numpad5" → "5"
+        if (/^Numpad\d$/.test(e.code)) return e.code[6]                // "Numpad5" → "5"
 
         // ── Fallback: dùng e.key nếu là ký tự đơn ───────────────────────────
         if (e.key && e.key.length === 1) return e.key.toLowerCase()
@@ -164,7 +174,7 @@ const codeMap = {
             e.stopPropagation()
 
             // Remove both listeners immediately
-            window.removeEventListener("keydown",   onCapture, true)
+            window.removeEventListener("keydown", onCapture, true)
             window.removeEventListener("mousedown", onCapture, true)
 
             // ESC → xoá bind đã lưu của combo này
@@ -180,7 +190,7 @@ const codeMap = {
             refreshBindUI()
         }
 
-        window.addEventListener("keydown",   onCapture, true)
+        window.addEventListener("keydown", onCapture, true)
         window.addEventListener("mousedown", onCapture, true)
     }
 
@@ -211,13 +221,13 @@ const codeMap = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ enabled: runActive })
-        }).catch(() => {})
+        }).catch(() => { })
     })
 
     // ── Save button ──────────────────────────────────────────────────────────
     saveBtn.addEventListener("click", () => {
         localStorage.setItem(STORAGE_KEY, chooseTb.value)
-
+        localStorage.setItem(FPS_STORAGE, FPS.value)
         // Persist pending bind key for this combo
         if (pendingKey !== null) {
             const map = loadSignKeys()
@@ -230,8 +240,8 @@ const codeMap = {
         fetch("http://localhost:5000/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ comboSignKeys: loadSignKeys() })
-        }).catch(() => {})
+            body: JSON.stringify({ comboSignKeys: loadSignKeys(), FPS: LoadFPS() })
+        }).catch(() => { })
 
         refreshBindUI()
 

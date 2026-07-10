@@ -31,7 +31,6 @@ keyboard = pynput.keyboard.Controller()
 left = pynput.mouse.Button.left
 right = pynput.mouse.Button.right
 
-FPSinput = 120
 keyinput = "caps_lock"
 
 # ── Config file (giao tiếp với frontend) ────────────────────────────────────
@@ -44,11 +43,16 @@ DEFAULT_CONFIG = {
     "comboSignKeys": {}
 }
 
+FPSinput = 120
+
 def load_config():
+    global FPSinput
     if os.path.exists(CONFIG_PATH):
         try:
             with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                config = json.load(f)
+                FPSinput = int(config.get("FPS", 120))
+                return config
         except Exception:
             pass
     return DEFAULT_CONFIG.copy()
@@ -543,11 +547,64 @@ def skk0qea(fps):
         return None
     skk3aw(fps)
 
+def skk0e2aq(fps):
+    skke(fps)
+    if is_no_key_pressed():
+        return None
+    skk2aq(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2az(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+
+
 # ── Combo map: chuỗi frontend → hàm Python ──────────────────────────────────
 COMBO_MAP = {
-    "22q223 223 22cd23 25":        skk0eqa_223_225,
-    "222q 223 223 22c3 223 3":     skk0eqa_main,
-    "qe 2cd23 223 223 2cd23 222":  skk0qea,
+    "Combo gảy chan" : skk0e2aq,
+    "C0:22q223 223 22cd23 25":        skk0eqa_223_225,
+    "C0:222q 223 223 22c3 223 3":     skk0eqa_main,
+    "C0:qe 2cd23 223 223 2cd23 222":  skk0qea,
 }
 
 run_enabled     = False          # Run button toggle
