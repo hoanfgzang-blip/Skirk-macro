@@ -35,10 +35,13 @@ FPSinput = 120
 keyinput = "caps_lock"
 
 # ── Config file (giao tiếp với frontend) ────────────────────────────────────
-CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+if getattr(sys, 'frozen', False):
+    CONFIG_PATH = os.path.join(os.path.dirname(sys.executable), "config.json")
+else:
+    CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+
 DEFAULT_CONFIG = {
-    "combo": "22q223 223 22cd23 25",
-    "bind_key": keyinput
+    "comboSignKeys": {}
 }
 
 def load_config():
@@ -367,7 +370,10 @@ def skk2aq(fps):
         pass
 
 def is_no_key_pressed():
-    return target not in pressed
+    key = getattr(_thread_local, "bind_key", None)
+    if key is None:
+        return True
+    return not any(key == k for k in pressed)
 
 def skke(fps):
     start = time.perf_counter()
@@ -475,6 +481,15 @@ def skk0eqa_main(fps):
     skk3aw(fps)
     if is_no_key_pressed():
         return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
+    if is_no_key_pressed():
+        return None
     skk3aw(fps)
 
 def skk0qea(fps):
@@ -524,6 +539,9 @@ def skk0qea(fps):
     if is_no_key_pressed():
         return None
     skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)
 
 # ── Combo map: chuỗi frontend → hàm Python ──────────────────────────────────
 COMBO_MAP = {
@@ -532,7 +550,10 @@ COMBO_MAP = {
     "qe 2cd23 223 223 2cd23 222":  skk0qea,
 }
 
-active_combo_fn = skk0eqa_223_225  # mặc định, sẽ cập nhật từ config
+run_enabled     = False          # Run button toggle
+active_bindings = {}             # { pynput_key: combo_fn }
+running_states  = {}             # { pynput_key: bool }
+_thread_local   = threading.local()
 
 #Xử lý code chạy macro
 from pynput import keyboard as kb
@@ -541,32 +562,65 @@ from pynput.keyboard import Key, KeyCode
 from pynput.mouse import Button
 
 pressed = set()
-running = False
 
 def parse_input(name):
+    if name == "mouse_4":
+        return Button.x2
+    if name == "mouse_3":
+        return Button.x1
+
     if hasattr(Button, name):
         return getattr(Button, name)
+
     if hasattr(Key, name):
         return getattr(Key, name)
+
     if len(name) == 1:
         return KeyCode.from_char(name.lower())
+
     raise ValueError(f"Unknown key: {name}")
 
-# ── apply_config: cập nhật target + active_combo_fn ─────────────────────────
-def apply_config(cfg):
-    global target, active_combo_fn
-    target = parse_input(cfg.get("bind_key", keyinput))
-    active_combo_fn = COMBO_MAP.get(cfg.get("combo"), skk0eqa_223_225)
+# ── apply_all_bindings: build active_bindings từ full sign_keys map ─────────
+def apply_all_bindings(sign_keys_map):
+    """Nhận dict { combo_str: key_name } → build active_bindings."""
+    global active_bindings, running_states
+    for key in list(running_states):
+        running_states[key] = False
+    active_bindings = {}
+    running_states  = {}
+    for combo_str, key_name in sign_keys_map.items():
+        fn = COMBO_MAP.get(combo_str)
+        if fn is None:
+            continue
+        try:
+            active_bindings[parse_input(key_name)] = fn
+        except Exception:
+            pass
 
 # ── HTTP Server để nhận config từ frontend ────────────────────────────────────
 class ConfigHandler(BaseHTTPRequestHandler):
     def do_POST(self):
-        if self.path == "/save":
+        if self.path in ("/save", "/run", "/shutdown"):
             try:
                 length = int(self.headers.get("Content-Length", 0))
-                body = json.loads(self.rfile.read(length))
-                save_config(body)
-                apply_config(body)
+                body = json.loads(self.rfile.read(length)) if length > 0 else {}
+                if self.path == "/save":
+                    save_config(body)
+                    apply_all_bindings(body.get("comboSignKeys", {}))
+                elif self.path == "/run":
+                    global run_enabled
+                    run_enabled = bool(body.get("enabled", False))
+                    if not run_enabled:
+                        for key in list(running_states):
+                            running_states[key] = False
+                elif self.path == "/shutdown":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Access-Control-Allow-Origin", "*")
+                    self.end_headers()
+                    self.wfile.write(b'{"ok": true}')
+                    threading.Thread(target=lambda: os._exit(0), daemon=True).start()
+                    return
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Access-Control-Allow-Origin", "*")
@@ -593,40 +647,47 @@ def start_http_server():
     server = HTTPServer(("localhost", 5000), ConfigHandler)
     server.serve_forever()
 
-# ── Khởi tạo target + active_combo_fn từ config (mục 1 — đã được phép) ───────
+# ── Khởi tạo active_bindings từ config đã lưu ───────────────────────────────
 _cfg = load_config()
-active_combo_fn = COMBO_MAP.get(_cfg.get("combo"), skk0eqa_223_225)
-target = parse_input(_cfg.get("bind_key", keyinput))
+apply_all_bindings(_cfg.get("comboSignKeys", {}))
 
-def worker():
-    global running
-    while running:
-        active_combo_fn(FPSinput)  # mục 2 — đã được phép
+def worker(key):
+    _thread_local.bind_key = key
+    while running_states.get(key, False):
+        fn = active_bindings.get(key)
+        if fn is None:
+            break
+        fn(FPSinput)
 
 def on_press(key):
-    global running
     pressed.add(key)
-    if target in pressed and not running:
-        running = True
-        threading.Thread(target=worker, daemon=True).start()
+    if not run_enabled:
+        return
+    for tgt in list(active_bindings):
+        if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
+            running_states[tgt] = True
+            threading.Thread(target=worker, args=(tgt,), daemon=True).start()
 
 def on_release(key):
-    global running
     pressed.discard(key)
-    if target not in pressed:
-        running = False
+    for tgt in list(active_bindings):
+        if not any(tgt == k for k in pressed):
+            running_states[tgt] = False
 
 def on_click(x, y, button, is_pressed):
-    global running
     if is_pressed:
         pressed.add(button)
-        if target in pressed and not running:
-            running = True
-            threading.Thread(target=worker, daemon=True).start()
+        if not run_enabled:
+            return
+        for tgt in list(active_bindings):
+            if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
+                running_states[tgt] = True
+                threading.Thread(target=worker, args=(tgt,), daemon=True).start()
     else:
         pressed.discard(button)
-        if target not in pressed:
-            running = False
+        for tgt in list(active_bindings):
+            if not any(tgt == k for k in pressed):
+                running_states[tgt] = False
 
 kb.Listener(on_press=on_press,on_release=on_release).start()
 ms.Listener(on_click=on_click).start()

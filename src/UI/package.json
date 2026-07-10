@@ -1,0 +1,41 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-builder --win --dir",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.skirk.macro",
+    "directories": {
+      "output": "../../build/app"
+    },
+    "win": {
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "extraResources": [
+      {
+        "from": "../../build/dist/main.exe",
+        "to": "main.exe"
+      }
+    ],
+    "files": [
+      "index.html",
+      "main.js",
+      "fe.js",
+      "style.css",
+      "logo.png"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3"
+  }
+}

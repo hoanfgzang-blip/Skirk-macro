@@ -1,4 +1,5 @@
 {
-  "combo": "qe 2cd23 223 223 2cd23 222",
-  "bind_key": "v"
+  "comboSignKeys": {
+    "qe 2cd23 223 223 2cd23 222": "mouse_3"
+  }
 }

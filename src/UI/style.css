@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: black;
+    background: linear-gradient(to top, #000000, #222222);
     margin: 0;
     min-height: 100vh;
     font-family: sans-serif;
@@ -17,9 +17,13 @@ body {
     font-size: 50px;
 }
 
+.logo img {
+    width: 320px;
+}
+
 .scrolldown {
     position: absolute;
-    top: 400px;
+    top: 300px;
     left: 400px;
     color: white;
     font-size: 20px;
@@ -42,15 +46,55 @@ body {
     font-size: 15px;
     padding: 8px 16px;
     position: absolute;
-    top: 500px;
+    top: 555px;
     left: 400px;
+    cursor: pointer;
+}
+
+/* NEW: Run Button */
+.run-section {
+    position: absolute;
+    top: 505px;
+    left: 400px;
+}
+
+.run-btn {
+    background-color: rgb(15, 15, 15);
+    color: rgb(100, 100, 100);
+    border: 1px solid rgb(50, 50, 50);
+    font-size: 15px;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    letter-spacing: 2px;
+    transition: all 0.2s ease;
+    min-width: 110px;
+}
+
+.run-btn:hover {
+    border-color: rgb(0, 200, 0);
+    color: rgb(0, 200, 0);
+}
+
+.run-btn.run-active {
+    background-color: rgb(0, 50, 0);
+    color: rgb(80, 255, 80);
+    border: 1px solid rgb(0, 200, 0);
+    box-shadow: 0 0 12px rgb(0, 180, 0);
+    animation: pulse-run 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-run {
+    from { box-shadow: 0 0 6px  rgb(0, 160, 0); }
+    to   { box-shadow: 0 0 18px rgb(0, 220, 0); }
 }
 
 
 /* NEW: Bind Key Widget */
 .bind-key-section {
     position: absolute;
-    top: 455px;
+    top: 430px;
     left: 400px;
     display: flex;
     flex-direction: column;

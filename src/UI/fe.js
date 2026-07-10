@@ -85,51 +85,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ── Keyboard: map browser e.code → pynput Key enum name ─────────────
-        const codeMap = {
-            // Modifier keys
-            "ShiftLeft":     "shift",
-            "ShiftRight":    "shift_r",
-            "ControlLeft":   "ctrl",
-            "ControlRight":  "ctrl_r",
-            "AltLeft":       "alt",
-            "AltRight":      "alt_gr",
-            "MetaLeft":      "cmd",
-            "MetaRight":     "cmd_r",
+const codeMap = {
+    // Modifier keys
+    "ShiftLeft":     "shift",
+    "ShiftRight":    "shift_r",
+    "ControlLeft":   "ctrl",
+    "ControlRight":  "ctrl_r",
+    "AltLeft":       "alt",
+    "AltRight":      "alt_gr",
+    "MetaLeft":      "cmd",
+    "MetaRight":     "cmd_r",
 
-            // Toggle keys
-            "CapsLock":      "caps_lock",
-            "NumLock":       "num_lock",
-            "ScrollLock":    "scroll_lock",
+    // Toggle keys
+    "CapsLock":      "caps_lock",
+    "NumLock":       "num_lock",
+    "ScrollLock":    "scroll_lock",
 
-            // Whitespace / editing
-            "Space":         "space",
-            "Enter":         "enter",
-            "Backspace":     "backspace",
-            "Tab":           "tab",
-            "Escape":        "esc",
-            "Delete":        "delete",
-            "Insert":        "insert",
+    // Whitespace / editing
+    "Space":         "space",
+    "Enter":         "enter",
+    "Backspace":     "backspace",
+    "Tab":           "tab",
+    "Escape":        "esc",
+    "Delete":        "delete",
+    "Insert":        "insert",
 
-            // Navigation
-            "Home":          "home",
-            "End":           "end",
-            "PageUp":        "page_up",
-            "PageDown":      "page_down",
-            "ArrowUp":       "up",
-            "ArrowDown":     "down",
-            "ArrowLeft":     "left",   // ⚠ trùng với Mouse left — tránh dùng cả hai
-            "ArrowRight":    "right",  // ⚠ trùng với Mouse right
+    // Navigation
+    "Home":          "home",
+    "End":           "end",
+    "PageUp":        "page_up",
+    "PageDown":      "page_down",
+    "ArrowUp":       "up",
+    "ArrowDown":     "down",
+    "ArrowLeft":     "left",
+    "ArrowRight":    "right",
 
-            // System
-            "PrintScreen":   "print_screen",
-            "Pause":         "pause",
+    // System
+    "PrintScreen":   "print_screen",
+    "Pause":         "pause",
 
-            // Function keys F1–F20
-            "F1":"f1","F2":"f2","F3":"f3","F4":"f4","F5":"f5",
-            "F6":"f6","F7":"f7","F8":"f8","F9":"f9","F10":"f10",
-            "F11":"f11","F12":"f12","F13":"f13","F14":"f14","F15":"f15",
-            "F16":"f16","F17":"f17","F18":"f18","F19":"f19","F20":"f20",
-        }
+    // Function keys F1–F20
+    "F1":"f1","F2":"f2","F3":"f3","F4":"f4","F5":"f5",
+    "F6":"f6","F7":"f7","F8":"f8","F9":"f9","F10":"f10",
+    "F11":"f11","F12":"f12","F13":"f13","F14":"f14","F15":"f15",
+    "F16":"f16","F17":"f17","F18":"f18","F19":"f19","F20":"f20",
+
+    // Mouse side buttons
+    "MouseBack":     "x1",
+    "MouseForward":  "x2",
+};
 
         if (codeMap[e.code]) return codeMap[e.code]
 
@@ -195,6 +199,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show bind UI on page load
     refreshBindUI()
 
+    // NEW: Run button
+    const runBtn = document.getElementById("runBtn")
+    let runActive = false
+
+    runBtn.addEventListener("click", () => {
+        runActive = !runActive
+        runBtn.classList.toggle("run-active", runActive)
+        runBtn.textContent = runActive ? "⏹ STOP" : "▶ RUN"
+        fetch("http://localhost:5000/run", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ enabled: runActive })
+        }).catch(() => {})
+    })
+
     // ── Save button ──────────────────────────────────────────────────────────
     saveBtn.addEventListener("click", () => {
         localStorage.setItem(STORAGE_KEY, chooseTb.value)
@@ -207,16 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
             pendingKey = null
         }
 
-        // NEW: POST config to Python backend (localhost:5000)
-        const signKeys = loadSignKeys()
-        const bindKey = signKeys[chooseTb.value] || null
-        if (bindKey) {
-            fetch("http://localhost:5000/save", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ combo: chooseTb.value, bind_key: bindKey })
-            }).catch(() => {})  // silent fail nếu Python chưa chạy
-        }
+        // POST full comboSignKeys map to Python backend
+        fetch("http://localhost:5000/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ comboSignKeys: loadSignKeys() })
+        }).catch(() => {})
 
         refreshBindUI()
 

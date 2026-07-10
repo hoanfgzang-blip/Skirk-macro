@@ -17,3 +17,5 @@ dist/
 
 # PyInstaller
 *.spec
+
+node_modules/
