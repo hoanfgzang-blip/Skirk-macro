@@ -16,7 +16,8 @@ function startPython() {
         args = [path.join(__dirname, '..', 'macro', 'main.py')];
     } else {
         // Packaged: chạy main.exe được đóng gói trong resources
-        pyPath = path.join(process.resourcesPath, 'main.exe');
+        const backendName = process.platform === 'win32' ? 'Cryss.exe' : 'Cryss';
+        pyPath = path.join(process.resourcesPath, backendName);
     }
 
     pyProc = spawn(pyPath, args, {
@@ -64,7 +65,7 @@ function stopPython() {
 function createWindow() {
     const win = new BrowserWindow({
         width: 600,
-        height: 600,
+        height: 720,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false

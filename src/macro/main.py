@@ -14,7 +14,7 @@ def is_admin():
     except Exception:
         return False
 
-if not is_admin():
+if sys.platform == "win32" and not is_admin():
     ctypes.windll.shell32.ShellExecuteW(
         None,
         "runas",
@@ -24,7 +24,8 @@ if not is_admin():
         1,
     )
     sys.exit()
-print(ctypes.windll.shell32.IsUserAnAdmin())
+if sys.platform == "win32":
+    print(ctypes.windll.shell32.IsUserAnAdmin())
 
 mouse = pynput.mouse.Controller()
 keyboard = pynput.keyboard.Controller()
@@ -150,6 +151,56 @@ def skk3aw(fps):
 
     keyboard.release("w")
 
+#n3d_quick
+def skk3as(fps):
+    
+    frame = 0
+    T_FRAME = [
+        [60, 120, 144, 240],
+        [18, 20, 22, 24],
+    ]
+    fps_values = T_FRAME[0]
+    frame_values = T_FRAME[1]
+
+    # FPS lớn hơn giá trị lớn nhất
+    if fps >= fps_values[-1]:
+        frame = frame_values[-1]
+
+    # FPS nhỏ hơn giá trị nhỏ nhất
+    if fps <= fps_values[0]:
+        frame = frame_values[0]
+
+    # tìm đoạn chứa fps
+    for i in range(len(fps_values) - 1):
+
+        if fps_values[i] <= fps <= fps_values[i + 1]:
+
+            fps1 = fps_values[i]
+            fps2 = fps_values[i + 1]
+
+            frame1 = frame_values[i]
+            frame2 = frame_values[i + 1]
+
+            weight = (fps - fps1) / (fps2 - fps1)
+
+            frame = frame1 + (frame2 - frame1) * weight
+
+    frame = frame_values[0]
+
+    start = time.perf_counter()
+
+    for _ in range(int(0.6 * fps)):
+        if time.perf_counter() - start > 0.6:
+            break
+
+        mouse.press(left)
+        time.sleep(1 / fps)
+        mouse.release(left)
+        time.sleep(2 / fps)
+    time.sleep(frame / fps)
+    mouse.press(right)
+    mouse.release(right)
+
 #n2d
 def skk2as(fps):
     start = time.perf_counter()
@@ -186,29 +237,28 @@ def skk2as(fps):
 
 #n2c
 def skk2az(fps):
-
     start = time.perf_counter()
-
-    t = fps2t([
-        [60,120,220],
-        [0.24,0.22,0.20]
-    ], fps)
-
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            0.24,
+            0.22,
+            0.2]]
+    t = fps2t(T_FPS, fps)
     for _ in range(int(0.2 * fps)):
         if time.perf_counter() - start > t:
             break
-
         mouse.press(left)
         mouse.release(left)
         time.sleep(2 / fps)
-
     while time.perf_counter() - start < t + 2 / fps:
         pass
-
     mouse.press(left)
     time.sleep(0.44)
     mouse.release(left)
-
     t = fps2t([
         [60,120,220],
         [1.16,1.12,1.09]
@@ -327,6 +377,11 @@ def skk5as(fps):
             2.28,
             2.24]]
     t = fps2t(T_FPS, fps)
+    mouse.press(right)
+    time.sleep(1 / fps)
+    mouse.release(right)
+    time.sleep(1 / fps)
+
     while time.perf_counter() - start < t + 2 / fps:
         pass
     return None
@@ -602,13 +657,60 @@ def skk0e2aq(fps):
         return None
     skk2as(fps)
 
+def skk222q_2325_22c_225_22(fps):
+    skke(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2aq(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk3as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk5as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2az(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk5as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)
+    if is_no_key_pressed():
+        return None
 
 # ── Combo map: chuỗi frontend → hàm Python ──────────────────────────────────
 COMBO_MAP = {
-    "Combo gảy chan" : skk0e2aq,
+    "Combo gảy chan" :                skk0e2aq,
     "C0:22q223 223 22cd23 25":        skk0eqa_223_225,
     "C0:222q 223 223 22c3 223 3":     skk0eqa_main,
     "C0:qe 2cd23 223 223 2cd23 222":  skk0qea,
+    "C0:222q 2325 22c 225 22":        skk222q_2325_22c_225_22,
 }
 
 run_enabled     = False          # Run button toggle

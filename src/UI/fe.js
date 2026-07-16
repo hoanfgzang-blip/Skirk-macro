@@ -3,6 +3,7 @@ const chooseCombo = [
     "C0:22q223 223 22cd23 25",
     "C0:222q 223 223 22c3 223 3",
     "C0:qe 2cd23 223 223 2cd23 222",
+    "C0:222q 2325 22c 225 22",
 ]
 
 const STORAGE_KEY = "selectedCombo"

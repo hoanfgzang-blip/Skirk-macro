@@ -5,29 +5,46 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package": "electron-builder --win --dir",
+    "package": "pnpm package:win",
+    "package:win": "electron-builder --win --dir",
+    "package:linux": "electron-builder --linux --dir --config.directories.output=../../build/app-linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
     "appId": "com.skirk.macro",
+    "productName": "Cryss",
     "directories": {
       "output": "../../build/app"
     },
     "win": {
-      "requestedExecutionLevel": "requireAdministrator"
+      "requestedExecutionLevel": "requireAdministrator",
+      "executableName": "Cryss",
+      "icon": "icon.png",
+      "extraResources": [
+        {
+          "from": "../../build/dist/Cryss.exe",
+          "to": "Cryss.exe"
+        }
+      ]
     },
-    "extraResources": [
-      {
-        "from": "../../build/dist/main.exe",
-        "to": "main.exe"
-      }
-    ],
+    "linux": {
+      "target": "dir",
+      "executableName": "Cryss",
+      "icon": "icon.png",
+      "extraResources": [
+        {
+          "from": "../../build/dist/Cryss",
+          "to": "Cryss"
+        }
+      ]
+    },
     "files": [
       "index.html",
       "main.js",
       "fe.js",
       "style.css",
-      "logo.png"
+      "logo.png",
+      "icon.png"
     ]
   },
   "keywords": [],
