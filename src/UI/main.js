@@ -1,7 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const { spawn, execSync } = require('child_process');
-const http = require('http');
+const { spawn } = require('child_process');
 
 let pyProc = null;
 
@@ -31,6 +30,7 @@ function startPython() {
 }
 
 function stopPython() {
+    const http = require('http');
     // 1. Gửi POST /shutdown để Python tự thoát (xử lý cả trường hợp admin re-launch)
     return new Promise((resolve) => {
         const req = http.request({
@@ -53,6 +53,7 @@ function stopPython() {
             try {
                 // Kill cả process tree (cho trường hợp admin re-launch tạo child)
                 if (process.platform === 'win32') {
+                    const { execSync } = require('child_process');
                     try { execSync(`taskkill /F /T /PID ${pyProc.pid}`, { stdio: 'ignore' }); } catch {}
                 }
                 pyProc.kill();
@@ -67,8 +68,10 @@ function createWindow() {
         width: 600,
         height: 720,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+            // The renderer only uses browser APIs (DOM, fetch, and localStorage).
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
         }
     });
 

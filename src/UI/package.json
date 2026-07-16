@@ -7,16 +7,23 @@
     "start": "electron .",
     "package": "pnpm package:win",
     "package:win": "electron-builder --win --dir",
+    "package:win:installer": "electron-builder --win nsis",
     "package:linux": "electron-builder --linux --dir --config.directories.output=../../build/app-linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
     "appId": "com.skirk.macro",
     "productName": "Cryss",
+    "asar": true,
+    "compression": "maximum",
     "directories": {
       "output": "../../build/app"
     },
     "win": {
+      "electronLanguages": [
+        "en-US",
+        "vi"
+      ],
       "requestedExecutionLevel": "requireAdministrator",
       "executableName": "Cryss",
       "icon": "icon.png",
@@ -43,7 +50,6 @@
       "main.js",
       "fe.js",
       "style.css",
-      "logo.png",
       "icon.png"
     ]
   },

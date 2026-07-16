@@ -1,7 +1,6 @@
 import ctypes
 import time
 import sys
-import subprocess
 import json
 import os
 import pynput
@@ -45,6 +44,13 @@ DEFAULT_CONFIG = {
 }
 
 FPSinput = 120
+
+# These calibration tables are used repeatedly while a macro is running. Keep
+# them immutable and allocate them once rather than rebuilding nested lists for
+# every combo step.
+T_FPS_3AW = ((30, 60, 100, 120, 220), (1.5, 1.366, 1.34, 1.32, 1.285))
+T_FPS_2AS_FIRST = ((60, 120, 220), (0.44, 0.40, 0.37))
+T_FPS_2AS_SECOND = ((60, 120, 220), (0.63, 0.57, 0.56))
 
 def load_config():
     global FPSinput
@@ -139,12 +145,7 @@ def skk3aw(fps):
 
     keyboard.press("w")
 
-    T_FPS = [
-        [30, 60, 100, 120, 220],
-        [1.5, 1.366, 1.34, 1.32, 1.285]
-    ]
-
-    t = fps2t(T_FPS, fps)
+    t = fps2t(T_FPS_3AW, fps)
 
     while time.perf_counter() - start < t:
         pass
@@ -213,10 +214,7 @@ def skk2as(fps):
         mouse.release(left)
         time.sleep(2 / fps)
 
-    t = fps2t([
-        [60, 120, 220],
-        [0.44, 0.40, 0.37]
-    ], fps)
+    t = fps2t(T_FPS_2AS_FIRST, fps)
 
     while time.perf_counter() - start < t:
         pass
@@ -227,10 +225,7 @@ def skk2as(fps):
 
     time.sleep(1 / fps)
 
-    t = fps2t([
-        [60, 120, 220],
-        [0.63, 0.57, 0.56]
-    ], fps)
+    t = fps2t(T_FPS_2AS_SECOND, fps)
 
     while time.perf_counter() - start < t:
         pass
@@ -432,7 +427,7 @@ def is_no_key_pressed():
     key = getattr(_thread_local, "bind_key", None)
     if key is None:
         return True
-    return not any(key == k for k in pressed)
+    return key not in pressed
 
 def skke(fps):
     start = time.perf_counter()
@@ -728,8 +723,14 @@ pressed = set()
 
 # ── Logging để debug ──────────────────────────────────────────────────────────
 DEBUG_LOG_PATH = os.path.join(os.path.dirname(CONFIG_PATH), "debug.log")
+# Debug logging is valuable for diagnostics but each input event previously
+# opened, timestamped, and synchronously wrote a file. Keep it available when
+# explicitly requested without paying that production runtime cost.
+DEBUG_LOGGING = os.environ.get("CRYSS_DEBUG_LOG") == "1"
 
 def log_debug(msg):
+    if not DEBUG_LOGGING:
+        return
     try:
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         with open(DEBUG_LOG_PATH, "a", encoding="utf-8") as f:
@@ -866,7 +867,7 @@ def on_press(key):
     if not run_enabled:
         return
     for tgt in list(active_bindings):
-        if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
+        if tgt in pressed and not running_states.get(tgt, False):
             running_states[tgt] = True
             log_debug(f"Trigger worker for target key: {tgt}")
             threading.Thread(target=worker, args=(tgt,), daemon=True).start()
@@ -875,7 +876,7 @@ def on_release(key):
     pressed.discard(key)
     log_debug(f"on_release: {key}")
     for tgt in list(active_bindings):
-        if not any(tgt == k for k in pressed):
+        if tgt not in pressed:
             running_states[tgt] = False
 
 def on_click(x, y, button, is_pressed):
@@ -885,7 +886,7 @@ def on_click(x, y, button, is_pressed):
         if not run_enabled:
             return
         for tgt in list(active_bindings):
-            if any(tgt == k for k in pressed) and not running_states.get(tgt, False):
+            if tgt in pressed and not running_states.get(tgt, False):
                 running_states[tgt] = True
                 log_debug(f"Trigger worker for target button: {tgt}")
                 threading.Thread(target=worker, args=(tgt,), daemon=True).start()
@@ -893,7 +894,7 @@ def on_click(x, y, button, is_pressed):
         pressed.discard(button)
         log_debug(f"on_click (release): {button}")
         for tgt in list(active_bindings):
-            if not any(tgt == k for k in pressed):
+            if tgt not in pressed:
                 running_states[tgt] = False
 
 kb.Listener(on_press=on_press,on_release=on_release).start()
