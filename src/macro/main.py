@@ -134,7 +134,7 @@ def fps2t(T_FPS, fps): #T_FPS: array, fps: float
 #n3w
 def skk3aw(fps):
     start = time.perf_counter()
-
+    t = fps2t(T_FPS_3AW, fps)
     for _ in range(int(0.6 * fps)):
         if time.perf_counter() - start > 0.6:
             break
@@ -144,13 +144,10 @@ def skk3aw(fps):
         time.sleep(2 / fps)
 
     keyboard.press("w")
-
-    t = fps2t(T_FPS_3AW, fps)
-
     while time.perf_counter() - start < t:
         pass
 
-    keyboard.release("w")
+    keyboard.release("w")   
 
 #n3d_quick
 def skk3as(fps):
@@ -222,9 +219,10 @@ def skk2as(fps):
     mouse.press(right)
     time.sleep(1 / fps)
     mouse.release(right)
-
     time.sleep(1 / fps)
-
+    keyboard.press('w')
+    time.sleep(1 / fps)
+    keyboard.release('w')
     t = fps2t(T_FPS_2AS_SECOND, fps)
 
     while time.perf_counter() - start < t:
@@ -454,22 +452,272 @@ def skk223_loop(fps):
         if is_no_key_pressed():
             break
 
-def skk0eqa_223_225(fps):
-    log_debug(f"Macro running with FPS: {fps}")
+# def skk0eqa_223_225(fps):
+#     log_debug(f"Macro running with FPS: {fps}")
+#     skke(fps)
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2aq(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2azs_slow(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk5as(fps)
+
+# def skk0eqa_main(fps):
+#     log_debug(f"Macro running with FPS: {FPSinput}")
+#     skke(fps)
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2aq(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2az(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+
+# def skk0qea(fps):
+#     log_debug(f"Macro running with FPS: {FPSinput}")
+#     skke(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2azs(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2azs_slow(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+
+# def skk0e2aq(fps):
+#     log_debug(f"Macro running with FPS: {FPSinput}")
+#     skke(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2aq(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2azs(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3aw(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+
+# def skk222q_2325_22c_225_22(fps):
+#     skke(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2aq(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk3as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk5as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2az(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk5as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+#     skk2as(fps)
+#     if is_no_key_pressed():
+#         return None
+
+def skkC0_EQA_120f(fps):
+#C0: 222q 223 223 22cd23 223
     skke(fps)
-    skk2as(fps)
     if is_no_key_pressed():
         return None
-    skk2aq(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk2as(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk2as(fps)
+    skk2aq(fps)#2
     if is_no_key_pressed():
         return None
-    skk3aw(fps)
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)#4
     if is_no_key_pressed():
         return None
     skk2as(fps)
@@ -496,79 +744,43 @@ def skk0eqa_223_225(fps):
     skk2as(fps)
     if is_no_key_pressed():
         return None
-    skk5as(fps)
-
-def skk0eqa_main(fps):
-    log_debug(f"Macro running with FPS: {FPSinput}")
-    skke(fps)
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2aq(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
     skk2as(fps)
     if is_no_key_pressed():
         return None
     skk3aw(fps)
     if is_no_key_pressed():
         return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2az(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-
-def skk0qea(fps):
-    log_debug(f"Macro running with FPS: {FPSinput}")
+    # skk2as(fps)
+    # if is_no_key_pressed():
+    #     return None
+    # skk2as(fps)
+    # if is_no_key_pressed():
+    #     return None
+    # skk3aw(fps)
+    # if is_no_key_pressed():
+    #     return None
+    
+def skkC0_QEA_120f(fps):
+#C0: 222q 223 223 22cd23 223
     skke(fps)
     if is_no_key_pressed():
         return None
-    skk2azs(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk2as(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk3aw(fps)
+    skk2az(fps)#2
     if is_no_key_pressed():
         return None
-    skk2as(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk2as(fps)
+    skk2as(fps)#2
     if is_no_key_pressed():
         return None
-    skk3aw(fps)
+    skk3aw(fps)#4
     if is_no_key_pressed():
         return None
     skk2as(fps)
@@ -599,13 +811,39 @@ def skk0qea(fps):
     if is_no_key_pressed():
         return None
     skk3aw(fps)
+    if is_no_key_pressed():
+        return None
+    # skk2as(fps)
+    # if is_no_key_pressed():
+    #     return None
+    # skk2as(fps)
+    # if is_no_key_pressed():
+    #     return None
+    # skk3aw(fps)
+    # if is_no_key_pressed():
+    #     return None
 
-def skk0e2aq(fps):
-    log_debug(f"Macro running with FPS: {FPSinput}")
+def skkC0_EQA_60f(fps):   
+#222Q 223 223 222C 224
     skke(fps)
     if is_no_key_pressed():
         return None
-    skk2aq(fps)
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk2aq(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk2as(fps)#2
+    if is_no_key_pressed():
+        return None
+    skk3aw(fps)#4
     if is_no_key_pressed():
         return None
     skk2as(fps)
@@ -618,63 +856,6 @@ def skk0e2aq(fps):
     if is_no_key_pressed():
         return None
     skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2azs(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk3aw(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-
-def skk222q_2325_22c_225_22(fps):
-    skke(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2aq(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk3as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk5as(fps)
     if is_no_key_pressed():
         return None
     skk2as(fps)
@@ -690,23 +871,57 @@ def skk222q_2325_22c_225_22(fps):
     if is_no_key_pressed():
         return None
     skk5as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-    skk2as(fps)
-    if is_no_key_pressed():
-        return None
-
+    
+    
 # ── Combo map: chuỗi frontend → hàm Python ──────────────────────────────────
 COMBO_MAP = {
-    "Combo gảy chan" :                skk0e2aq,
-    "C0:22q223 223 22cd23 25":        skk0eqa_223_225,
-    "C0:222q 223 223 22c3 223 3":     skk0eqa_main,
-    "C0:qe 2cd23 223 223 2cd23 222":  skk0qea,
-    "C0:222q 2325 22c 225 22":        skk222q_2325_22c_225_22,
+    # "Combo gảy chan" :                skk0e2aq,
+    # "C0:22q223 223 22cd23 25":        skk0eqa_223_225,
+    # "C0:222q 223 223 22c3 223 3":     skk0eqa_main,
+    # "C0:qe 2cd23 223 223 2cd23 222":  skk0qea,
+    # "C0:222q 2325 22c 225 22":        skk222q_2325_22c_225_22,
+    "C0:  Combo Skirk C0 EQA 120fps" : skkC0_EQA_120f,
+    "C0:  Combo Skirk C0 EA 120fps" : skkC0_QEA_120f,
+    "C0:  Combo Skirk C0 EQA 60fps" :  skkC0_EQA_60f,
+
 }
+
+# ── Step map: tên hàm string → hàm Python (cho custom combo) ─────────────────
+STEP_MAP = {
+    "skk3aw": skk3aw,
+    "skk2as": skk2as,
+    "skk3as": skk3as,
+    "skk2az": skk2az,
+    "skk2azs": skk2azs,
+    "skk2azs_slow": skk2azs_slow,
+    "skk2aq": skk2aq,
+    "skke": skke,
+    "skk5as": skk5as,
+}
+
+def build_custom_combo_fn(name, python_sequence):
+    """Tạo hàm combo động từ danh sách pythonSequence."""
+    steps = []
+    for step_name in python_sequence:
+        if step_name == "is_no_key_pressed":
+            steps.append(("check", None))
+        else:
+            fn = STEP_MAP.get(step_name)
+            if fn is not None:
+                steps.append(("call", fn))
+    # Freeze to avoid mutation after construction.
+    steps = tuple(steps)
+
+    def custom_combo(fps):
+        for kind, fn in steps:
+            if kind == "check":
+                if is_no_key_pressed():
+                    return None
+            else:
+                fn(fps)
+
+    custom_combo.__name__ = name or f"custom_combo_{id(custom_combo)}"
+    return custom_combo
 
 run_enabled     = False          # Run button toggle
 active_bindings = {}             # { pynput_key: combo_fn }
@@ -757,14 +972,15 @@ def parse_input(name):
     raise ValueError(f"Unknown key: {name}")
 
 # ── apply_all_bindings: build active_bindings từ full sign_keys map ─────────
-def apply_all_bindings(sign_keys_map):
-    """Nhận dict { combo_str: key_name } → build active_bindings."""
+def apply_all_bindings(sign_keys_map, custom_combos=None):
+    """Nhận dict { combo_str: key_name } + list customCombos → build active_bindings."""
     global active_bindings, running_states
     log_debug(f"apply_all_bindings called with: {sign_keys_map}")
     for key in list(running_states):
         running_states[key] = False
     active_bindings = {}
     running_states  = {}
+    # 1. Bind combo có sẵn (từ COMBO_MAP)
     for combo_str, key_name in sign_keys_map.items():
         fn = COMBO_MAP.get(combo_str)
         if fn is None:
@@ -776,6 +992,20 @@ def apply_all_bindings(sign_keys_map):
             log_debug(f"Bound: {parsed} -> {fn.__name__}")
         except Exception as e:
             log_debug(f"Error binding {key_name}: {e}")
+    # 2. Bind custom combo (từ customCombos)
+    if custom_combos:
+        for combo in custom_combos:
+            hotkey = combo.get("hotkey")
+            seq = combo.get("pythonSequence", [])
+            if not hotkey or not seq:
+                continue
+            try:
+                parsed = parse_input(hotkey)
+                fn = build_custom_combo_fn(combo.get("name", "custom"), seq)
+                active_bindings[parsed] = fn
+                log_debug(f"Bound custom: {parsed} -> {fn.__name__}")
+            except Exception as e:
+                log_debug(f"Error binding custom combo {combo.get('name')}: {e}")
 
 # Hàm nhập FPS từ config.json
 def get_fps():
@@ -794,7 +1024,7 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 log_debug(f"POST body: {body}")
                 if self.path == "/save":
                     save_config(body)
-                    apply_all_bindings(body.get("comboSignKeys", {}))
+                    apply_all_bindings(body.get("comboSignKeys", {}), body.get("customCombos", []))
                     get_fps()
                 elif self.path == "/run":
                     global run_enabled
@@ -824,10 +1054,27 @@ class ConfigHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
+    def do_GET(self):
+        if self.path == "/config":
+            try:
+                config = load_config()
+                payload = json.dumps(config, ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(payload)
+            except Exception:
+                self.send_response(500)
+                self.end_headers()
+        else:
+            self.send_response(404)
+            self.end_headers()
+
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
@@ -840,7 +1087,7 @@ def start_http_server():
 
 # ── Khởi tạo active_bindings từ config đã lưu ───────────────────────────────
 _cfg = load_config()
-apply_all_bindings(_cfg.get("comboSignKeys", {}))
+apply_all_bindings(_cfg.get("comboSignKeys", {}), _cfg.get("customCombos", []))
 
 def worker(key):
     _thread_local.bind_key = key

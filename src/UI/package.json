@@ -50,7 +50,15 @@
       "main.js",
       "fe.js",
       "style.css",
-      "icon.png"
+      "icon.png",
+      "nav.css",
+      "nav.js",
+      "cuscombo.html",
+      "cuscombo.css",
+      "cuscombo.js",
+      "manage.html",
+      "manage.css",
+      "manage.js"
     ]
   },
   "keywords": [],

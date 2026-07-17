@@ -65,7 +65,7 @@ function stopPython() {
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 600,
+        width: 900,
         height: 720,
         webPreferences: {
             // The renderer only uses browser APIs (DOM, fetch, and localStorage).

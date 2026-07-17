@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Custom Combo | Skirk Macro</title>
+    <link rel="stylesheet" href="cuscombo.css">
+    <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+    <main class="custom-combo-app">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">SKIRK MACRO / CUSTOM COMBO</p>
+                <h1>Tạo Custom Combo</h1>
+                <p class="subtitle">Kéo action từ palette vào timeline, sắp xếp rồi lưu.</p>
+            </div>
+            <button id="newComboButton" class="secondary-button" type="button">Combo mới</button>
+        </header>
+
+        <section class="panel palette-panel" aria-labelledby="paletteTitle">
+            <div class="panel-heading">
+                <div>
+                    <p class="section-kicker">VÙNG 1</p>
+                    <h2 id="paletteTitle">Action palette</h2>
+                </div>
+                <span id="paletteCount" class="count-badge"></span>
+            </div>
+            <p class="panel-description">Kéo để thêm action. Palette luôn giữ nguyên.</p>
+            <div id="comboPalette" class="combo-palette" aria-label="Danh sách action có sẵn"></div>
+        </section>
+
+        <section class="panel timeline-panel" aria-labelledby="timelineTitle">
+            <div class="panel-heading">
+                <div>
+                    <p class="section-kicker">VÙNG 2</p>
+                    <h2 id="timelineTitle">Timeline</h2>
+                </div>
+                <span id="timelineCount" class="count-badge">0 action</span>
+            </div>
+            <p class="panel-description">Kéo để đổi thứ tự. Chọn action rồi nhấn <kbd>Delete</kbd> để xóa.</p>
+
+            <div class="timeline-shell">
+                <div id="timeline" class="timeline" tabindex="0" aria-label="Timeline custom combo">
+                    <div id="timelineEmpty" class="timeline-empty">
+                        <span class="empty-icon">+</span>
+                        <span>Timeline đang trống</span>
+                        <small>Kéo action vào đây để bắt đầu.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="combo-form">
+                <label class="field-label" for="comboName">Tên Combo</label>
+                <input id="comboName" class="text-input" type="text" maxlength="80" placeholder="Ví dụ: Skirk Combo 1" autocomplete="off">
+
+                <div class="hotkey-heading">
+                    <label class="field-label" for="hotkeyCapture">Hotkey</label>
+                    <span class="field-hint">Không bắt buộc</span>
+                </div>
+                <div class="hotkey-row">
+                    <button id="hotkeyCapture" class="hotkey-capture" type="button">Nhấn để gán phím hoặc nút chuột</button>
+                    <button id="clearHotkey" class="icon-button" type="button" aria-label="Xóa hotkey" title="Xóa hotkey">×</button>
+                </div>
+
+                <details class="python-preview">
+                    <summary>Python sequence xem trước</summary>
+                    <pre id="pythonPreview">Chưa có action.</pre>
+                </details>
+
+                <div class="form-footer">
+                    <span id="savedCount" class="saved-count">0 combo đã lưu</span>
+                    <button id="saveCombo" class="primary-button" type="button">Save Combo</button>
+                </div>
+                <p id="saveStatus" class="save-status" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="nav.js"></script>
+    <script src="cuscombo.js"></script>
+</body>
+</html>

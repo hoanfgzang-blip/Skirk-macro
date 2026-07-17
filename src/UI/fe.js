@@ -1,9 +1,12 @@
 const chooseCombo = [
-    "Combo gảy chan",
-    "C0:22q223 223 22cd23 25",
-    "C0:222q 223 223 22c3 223 3",
-    "C0:qe 2cd23 223 223 2cd23 222",
-    "C0:222q 2325 22c 225 22",
+    // "Combo gảy chan",
+    // "C0:22q223 223 22cd23 25",
+    // "C0:222q 223 223 22c3 223 3",
+    // "C0:qe 2cd23 223 223 2cd23 222",
+    // "C0:222q 2325 22c 225 22",
+    "C0:  Combo Skirk C0 EQA 120fps",
+    "C0:  Combo Skirk C0 EA 120fps",
+    "C0:  Combo Skirk C0 EQA 60fps",
 ]
 
 const STORAGE_KEY = "selectedCombo"
@@ -175,6 +178,18 @@ document.addEventListener("DOMContentLoaded", () => {
         savedKeyBadge.style.display = "none"
         pendingKey = null
 
+        function preventNextMouseUp(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            window.removeEventListener("mouseup", preventNextMouseUp, true)
+        }
+
+        function preventNextClick(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            window.removeEventListener("click", preventNextClick, true)
+        }
+
         function onCapture(e) {
             e.preventDefault()
             e.stopPropagation()
@@ -182,6 +197,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Remove both listeners immediately
             window.removeEventListener("keydown", onCapture, true)
             window.removeEventListener("mousedown", onCapture, true)
+
+            if (e.type === "mousedown") {
+                window.addEventListener("mouseup", preventNextMouseUp, true)
+                window.addEventListener("click", preventNextClick, true)
+            }
 
             // ESC → xoá bind đã lưu của combo này
             if (e.type === "keydown" && e.code === "Escape") {
@@ -242,11 +262,13 @@ document.addEventListener("DOMContentLoaded", () => {
             pendingKey = null
         }
 
-        // POST full comboSignKeys map to Python backend
+        // POST full config to Python backend — preserve customCombos
+        let customCombos = []
+        try { customCombos = JSON.parse(localStorage.getItem("customCombos")) || [] } catch {}
         fetch("http://localhost:5000/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ comboSignKeys: loadSignKeys(), FPS: LoadFPS() })
+            body: JSON.stringify({ comboSignKeys: loadSignKeys(), FPS: LoadFPS(), customCombos })
         }).catch(() => { })
 
         refreshBindUI()
