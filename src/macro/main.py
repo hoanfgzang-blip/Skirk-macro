@@ -110,7 +110,6 @@ def fps2t(T_FPS, fps): #T_FPS: array, fps: float
 
     # FPS nhỏ hơn giá trị nhỏ nhất
     if fps <= fps_values[0]:
-        print("Tốc độ khung hình quá thấp để hỗ trợ")
         return t_values[0]
 
     # tìm đoạn chứa fps

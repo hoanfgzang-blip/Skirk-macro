@@ -1,4 +1,6 @@
 @echo off
+setlocal
+
 echo ===================================
 echo   Building Skirk Macro App
 echo ===================================
@@ -11,32 +13,67 @@ if not exist "build" (
     mkdir "build"
 )
 
+REM Remove old PyInstaller build
+if exist "build\temp" (
+    rmdir /s /q "build\temp"
+)
+
+if exist "build\dist" (
+    rmdir /s /q "build\dist"
+)
+
 cd build
-call pyinstaller --onefile --name "Cryss" --workpath "temp" --distpath "dist" "..\src\macro\main.py"
+
+call pyinstaller ^
+    --clean ^
+    --noupx ^
+    --onefile ^
+    --windowed ^
+    --name "Cryss" ^
+    --workpath "temp" ^
+    --specpath "temp" ^
+    --distpath "dist" ^
+    "..\src\macro\main.py"
+
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Failed to build Python backend!
     pause
     exit /b %errorlevel%
 )
+
 cd ..
 
 echo.
 echo [2/2] Building Electron UI...
+
 cd src\UI
-if exist "..\..\build\app" rmdir /s /q "..\..\build\app"
+
+REM Remove previous Electron output
+if exist "..\..\build\app" (
+    rmdir /s /q "..\..\build\app"
+)
+
 call pnpm package:win
+
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Failed to build Electron UI!
     pause
     exit /b %errorlevel%
 )
+
 cd ..\..
 
 echo.
 echo ===================================
 echo   BUILD SUCCESSFUL!
-echo   App is located in: build\app\win-unpacked\Cryss.exe
 echo ===================================
+echo.
+echo Python backend:
+echo   build\dist\Cryss.exe
+echo.
+echo Electron app:
+echo   build\app\win-unpacked\Cryss.exe
+echo.
 pause

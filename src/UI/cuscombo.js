@@ -3,14 +3,14 @@
  * Timeline stores only pythonFunction values, so saved JSON is backend-ready.
  */
 const COMBO_ACTIONS = Object.freeze([
-    { label: "n3w", pythonFunction: "skk3aw" },
+    { label: "E", pythonFunction: "skke" },
     { label: "n2d", pythonFunction: "skk2as" },
-    { label: "n3d", pythonFunction: "skk3as" },
     { label: "n2c", pythonFunction: "skk2az" },
     { label: "n2cd", pythonFunction: "skk2azs" },
     { label: "n2cd_slow", pythonFunction: "skk2azs_slow" },
     { label: "n2q", pythonFunction: "skk2aq" },
-    { label: "E", pythonFunction: "skke" },
+    { label: "n3d", pythonFunction: "skk3as" },
+    { label: "n3w", pythonFunction: "skk3aw" },
     { label: "n5d", pythonFunction: "skk5as" }
 ]);
 
