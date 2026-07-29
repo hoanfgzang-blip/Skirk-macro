@@ -27,7 +27,7 @@ cd build
 call pyinstaller ^
     --clean ^
     --noupx ^
-    --onefile ^
+    --onedir ^
     --windowed ^
     --name "Cryss" ^
     --workpath "temp" ^
