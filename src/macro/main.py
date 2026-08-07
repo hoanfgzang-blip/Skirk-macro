@@ -14,15 +14,18 @@ def is_admin():
         return False
 
 if sys.platform == "win32" and not is_admin():
-    ctypes.windll.shell32.ShellExecuteW(
-        None,
-        "runas",
-        sys.executable,
-        os.path.abspath(__file__),
-        None,
-        1,
-    )
-    sys.exit()
+    if getattr(sys, 'frozen', False):
+        # Packaged .exe: re-launch chính exe với quyền admin (không cần truyền arg)
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", sys.executable, None, None, 1
+        )
+    else:
+        # Dev mode: re-launch python với file .py
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", sys.executable,
+            os.path.abspath(__file__), None, 1
+        )
+    sys.exit(0)  # exit code 0 để Electron không báo lỗi "Backend exited with non-zero code"
 if sys.platform == "win32":
     print(ctypes.windll.shell32.IsUserAnAdmin())
 
@@ -141,11 +144,10 @@ def skk3aw(fps):
         mouse.press(left)
         mouse.release(left)
         time.sleep(2 / fps)
-
-    keyboard.press("w")
     while time.perf_counter() - start < t:
         pass
-
+    keyboard.press("w")
+    time.sleep(1 / fps)
     keyboard.release("w")   
 
 #n3d_quick
@@ -223,6 +225,23 @@ def skk2as(fps):
     time.sleep(1 / fps)
     keyboard.release('w')
     t = fps2t(T_FPS_2AS_SECOND, fps)
+
+    while time.perf_counter() - start < t:
+        pass
+
+#n2
+def skk2a(fps):
+    start = time.perf_counter()
+
+    for _ in range(int(0.26 * fps)):
+        if time.perf_counter() - start > 0.32:
+            break
+
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
+
+    t = fps2t(T_FPS_2AS_FIRST, fps)
 
     while time.perf_counter() - start < t:
         pass
@@ -377,6 +396,28 @@ def skk5as(fps):
     while time.perf_counter() - start < t + 2 / fps:
         pass
     return None
+
+#n5
+def skk5a(fps):
+    start = time.perf_counter()
+    for _ in range(int(2 * fps)):
+        if time.perf_counter() - start > 2.1:
+            break
+        mouse.press(left)
+        mouse.release(left)
+        time.sleep(2 / fps)
+    T_FPS = [
+        [
+            60,
+            120,
+            220],
+        [
+            2.22,
+            2.14,
+            2.12]]
+    t = fps2t(T_FPS, fps)
+    while time.perf_counter() - start < t + 2 / fps:
+        pass
 
 #n2q
 def skk2aq(fps):
@@ -1012,11 +1053,163 @@ def get_fps():
     FPSinput = load_config().get("FPS", 120)
     log_debug(f"FPS set to: {FPSinput}")
 
+# ── Unlocker config (giao tiếp với unlocker config.ini) ──────────────────────
+def get_unlocker_dir():
+    if getattr(sys, 'frozen', False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    candidates = [
+        os.path.join(base_dir, "unlocker"),
+        os.path.join(os.path.dirname(base_dir), "src", "unlocker")
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return candidates[0]
+
+def get_unlocker_config_path():
+    if getattr(sys, 'frozen', False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    candidates = [
+        os.path.join(base_dir, "unlocker", "Plugins", "UnlockerIsland", "config.ini"),
+        os.path.join(base_dir, "Plugins", "UnlockerIsland", "config.ini"),
+        os.path.join(os.path.dirname(base_dir), "src", "unlocker", "Plugins", "UnlockerIsland", "config.ini")
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return candidates[0]
+
+def load_unlocker_config():
+    path = get_unlocker_config_path()
+    result = {
+        "File": "CUTTOOL.UnlockerIsland.dll",
+        "GamePath": r"C:\Program Files\HoYoPlay\games\Genshin Impact game\GenshinImpact.exe",
+        "Vsync": 0,
+        "FpsUnlock": 1,
+        "TargetFps": 240,
+        "FovUnlock": 1,
+        "FovValue": 60,
+        "HideUID": 0,
+        "DisableCameraMove": 1,
+        "DisableFog": 1,
+        "RemoveTeamAnim": 1,
+        "DisableBurstBlackscreen": 1,
+        "HideGrassIndiscriminate": 0
+    }
+    if not os.path.exists(path):
+        return result
+    try:
+        current_section = None
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line_str = line.strip()
+                if not line_str or line_str.startswith(";") or line_str.startswith("#"):
+                    continue
+                if line_str.startswith("[") and line_str.endswith("]"):
+                    current_section = line_str[1:-1].strip()
+                elif "=" in line_str:
+                    k, v = line_str.split("=", 1)
+                    k = k.strip()
+                    v = v.strip()
+                    if current_section and k.lower() == "value":
+                        try:
+                            result[current_section] = int(v)
+                        except ValueError:
+                            result[current_section] = v
+                    elif not current_section:
+                        result[k] = v
+    except Exception as e:
+        log_debug(f"Error reading unlocker config.ini: {e}")
+    return result
+
+def save_unlocker_config(data):
+    path = get_unlocker_config_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    
+    # Map key aliases if present
+    if "DisableBurstBackscreen" in data and "DisableBurstBlackscreen" not in data:
+        data["DisableBurstBlackscreen"] = data["DisableBurstBackscreen"]
+    if "HideGrassIndicriminate" in data and "HideGrassIndiscriminate" not in data:
+        data["HideGrassIndiscriminate"] = data["HideGrassIndicriminate"]
+
+    file_val = data.get("File", "CUTTOOL.UnlockerIsland.dll")
+    lines = [f"File={file_val}\n\n"]
+    
+    sections = [
+        "GamePath", "Vsync", "FpsUnlock", "TargetFps", "FovUnlock", "FovValue",
+        "HideUID", "DisableCameraMove", "DisableFog", "RemoveTeamAnim",
+        "DisableBurstBlackscreen", "HideGrassIndiscriminate"
+    ]
+    
+    ordered_keys = list(sections)
+    for k in data.keys():
+        if k not in ordered_keys and k not in ("File", "DisableBurstBackscreen", "HideGrassIndicriminate"):
+            ordered_keys.append(k)
+            
+    for sec in ordered_keys:
+        if sec in data:
+            val = data[sec]
+            if isinstance(val, bool):
+                val = 1 if val else 0
+            lines.append(f"[{sec}]\nValue={val}\n\n")
+            
+    with open(path, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+    log_debug(f"Saved unlocker config to: {path}")
+
+import subprocess
+import shutil
+
+def launch_game(game_path=None):
+    if not game_path:
+        cfg = load_unlocker_config()
+        game_path = cfg.get("GamePath", r"C:\Program Files\HoYoPlay\games\Genshin Impact game\GenshinImpact.exe")
+    
+    if not game_path or not os.path.exists(game_path):
+        return False, f"Không tìm thấy file game tại:\n{game_path}\nVui lòng chọn lại file GenshinImpact.exe trong phần Tùy chỉnh."
+
+    unlocker_dir = get_unlocker_dir()
+    launcher_exe = os.path.join(unlocker_dir, "Launcher_2.exe")
+    if not os.path.exists(launcher_exe):
+        return False, f"Không tìm thấy Launcher_2.exe tại:\n{launcher_exe}"
+
+    plugins_dir = os.path.join(unlocker_dir, "Plugins", "UnlockerIsland")
+    os.makedirs(plugins_dir, exist_ok=True)
+
+    # Copy DLL if needed
+    dll_src = os.path.join(unlocker_dir, "CUTTOOL.UnlockerIsland.dll")
+    dll_dst = os.path.join(plugins_dir, "CUTTOOL.UnlockerIsland.dll")
+    if os.path.exists(dll_src) and not os.path.exists(dll_dst):
+        try:
+            shutil.copy2(dll_src, dll_dst)
+            log_debug(f"Copied {dll_src} -> {dll_dst}")
+        except Exception as e:
+            log_debug(f"Failed to copy DLL: {e}")
+
+    # Ensure config.ini exists
+    ini_path = os.path.join(plugins_dir, "config.ini")
+    if not os.path.exists(ini_path):
+        save_unlocker_config({})
+
+    log_debug(f"Executing Launcher_2.exe: '{launcher_exe}' '{game_path}'")
+    try:
+        subprocess.Popen([launcher_exe, game_path], cwd=unlocker_dir)
+        return True, "Đã khởi động Launcher_2.exe và Game thành công!"
+    except Exception as e:
+        log_debug(f"Error executing Launcher_2.exe: {e}")
+        return False, f"Lỗi khi khởi chạy Launcher_2.exe: {e}"
+
 # ── HTTP Server để nhận config từ frontend ────────────────────────────────────
 class ConfigHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         log_debug(f"POST request received on: {self.path}")
-        if self.path in ("/save", "/run", "/shutdown"):
+        if self.path in ("/save", "/run", "/shutdown", "/unlocker-config", "/launch-game"):
             try:
                 length = int(self.headers.get("Content-Length", 0))
                 body = json.loads(self.rfile.read(length)) if length > 0 else {}
@@ -1032,21 +1225,26 @@ class ConfigHandler(BaseHTTPRequestHandler):
                     if not run_enabled:
                         for key in list(running_states):
                             running_states[key] = False
-                elif self.path == "/shutdown":
-                    self.send_response(200)
+                elif self.path == "/unlocker-config":
+                    save_unlocker_config(body)
+                elif self.path == "/launch-game":
+                    g_path = body.get("gamePath")
+                    ok, msg = launch_game(g_path)
+                    resp_body = json.dumps({"ok": ok, "message" if ok else "error": msg}, ensure_ascii=False).encode("utf-8")
+                    status_code = 200 if ok else 400
+                    self.send_response(status_code)
                     self.send_header("Content-Type", "application/json")
                     self.send_header("Access-Control-Allow-Origin", "*")
                     self.end_headers()
-                    self.wfile.write(b'{"ok": true}')
-                    log_debug("Shutdown command received, exiting process.")
-                    threading.Thread(target=lambda: os._exit(0), daemon=True).start()
+                    self.wfile.write(resp_body)
                     return
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 self.wfile.write(b'{"ok": true}')
-            except Exception:
+            except Exception as e:
+                log_debug(f"Error handling POST {self.path}: {e}")
                 self.send_response(500)
                 self.end_headers()
         else:
@@ -1064,6 +1262,19 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(payload)
             except Exception:
+                self.send_response(500)
+                self.end_headers()
+        elif self.path == "/unlocker-config":
+            try:
+                cfg = load_unlocker_config()
+                payload = json.dumps(cfg, ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(payload)
+            except Exception as e:
+                log_debug(f"Error GET /unlocker-config: {e}")
                 self.send_response(500)
                 self.end_headers()
         else:

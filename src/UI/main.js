@@ -1,36 +1,113 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs');
+const http = require('http');
 
 let pyProc = null;
+let mainWin = null;
+
+// ── Debug log file ────────────────────────────────────────────────────────────
+const LOG_DIR  = app.getPath('userData');
+const LOG_FILE = path.join(LOG_DIR, 'electron-debug.log');
+
+function ensureLogDir() {
+    try { fs.mkdirSync(LOG_DIR, { recursive: true }); } catch {}
+}
+
+function logE(msg) {
+    const ts  = new Date().toISOString();
+    const line = `[${ts}] ${msg}\n`;
+    console.log(line.trim());
+    try { fs.appendFileSync(LOG_FILE, line, 'utf8'); } catch {}
+}
+
+// ── Kiểm tra backend sẵn sàng (poll /config) ─────────────────────────────────
+function waitForBackend(maxMs = 30000, intervalMs = 300) {
+    return new Promise((resolve, reject) => {
+        const deadline = Date.now() + maxMs;
+        function probe() {
+            if (pyProc && pyProc.exitCode !== null && pyProc.exitCode !== 0) {
+                reject(new Error(`Backend đã thoát sớm với exit code ${pyProc.exitCode}`));
+                return;
+            }
+            const req = http.request(
+                { hostname: 'localhost', port: 5000, path: '/config', method: 'GET', timeout: 1000 },
+                (res) => { logE(`Backend sẵn sàng (status ${res.statusCode})`); resolve(); }
+            );
+            req.on('error', () => {
+                if (Date.now() >= deadline) {
+                    reject(new Error(`Backend không phản hồi sau ${maxMs}ms`));
+                } else {
+                    setTimeout(probe, intervalMs);
+                }
+            });
+            req.on('timeout', () => { req.destroy(); });
+            req.end();
+        }
+        probe();
+    });
+}
 
 function startPython() {
     const isPackaged = app.isPackaged;
     let pyPath;
     let args = [];
 
+    logE(`=== Khởi động ứng dụng ===`);
+    logE(`isPackaged: ${isPackaged}`);
+    logE(`process.resourcesPath: ${process.resourcesPath}`);
+    logE(`__dirname: ${__dirname}`);
+    logE(`platform: ${process.platform}`);
+
     if (!isPackaged) {
-        // Dev: chạy qua thông dịch viên python
-        pyPath = process.platform === 'win32' ? 'python' : 'python3';
+        // Dev Mode: Chạy trực tiếp file Python trong thư mục macro bằng pyw (không hiện cửa sổ console) / python3
+        pyPath = process.platform === 'win32' ? 'pyw' : 'python3';
         args = [path.join(__dirname, '..', 'macro', 'main.py')];
+        logE(`[Dev Mode] Đang chạy file Python trực tiếp: ${args[0]}`);
     } else {
-        // Packaged: chạy main.exe được đóng gói trong resources
+        // Packaged Mode (đã đóng gói): Chạy Cryss.exe từ thư mục resources
         const backendName = process.platform === 'win32' ? 'Cryss.exe' : 'Cryss';
         pyPath = path.join(process.resourcesPath, backendName);
+        logE(`[Packaged Mode] Đang chạy backend từ resources: ${pyPath}`);
     }
 
+    logE(`pyPath: ${pyPath}`);
+    logE(`args: ${JSON.stringify(args)}`);
+
+    // Kiểm tra file tồn tại (chỉ cho packaged exe)
+    if (isPackaged && !fs.existsSync(pyPath)) {
+        const msg = `CRITICAL: Không tìm thấy backend tại:\n${pyPath}\n\nNội dung resources:\n${listDir(process.resourcesPath)}`;
+        logE(msg);
+        dialog.showErrorBox('Lỗi Backend', msg);
+        return;
+    }
+
+    // Đặt CRYSS_DEBUG_LOG=1 để backend ghi debug.log
+    const env = Object.assign({}, process.env, { CRYSS_DEBUG_LOG: '1' });
+
     pyProc = spawn(pyPath, args, {
-        stdio: 'ignore',
-        windowsHide: true
+        stdio: ['ignore', 'pipe', 'pipe'],   // capture stdout/stderr để log
+        windowsHide: true,
+        env
     });
 
+    logE(`Backend spawned, PID: ${pyProc.pid}`);
+
+    pyProc.stdout.on('data', (d) => logE(`[backend stdout] ${d.toString().trim()}`));
+    pyProc.stderr.on('data', (d) => logE(`[backend stderr] ${d.toString().trim()}`));
+
     pyProc.on('error', (err) => {
-        console.error('Không thể khởi chạy Python backend:', err);
+        logE(`Lỗi spawn backend: ${err.message}`);
+        dialog.showErrorBox('Lỗi Backend', `Không thể khởi động backend:\n${err.message}\n\nXem log: ${LOG_FILE}`);
+    });
+
+    pyProc.on('close', (code, signal) => {
+        logE(`Backend đã thoát: code=${code}, signal=${signal}`);
     });
 }
 
 function stopPython() {
-    const http = require('http');
     // 1. Gửi POST /shutdown để Python tự thoát (xử lý cả trường hợp admin re-launch)
     return new Promise((resolve) => {
         const req = http.request({
@@ -41,10 +118,11 @@ function stopPython() {
             headers: { 'Content-Type': 'application/json' },
             timeout: 2000
         }, (res) => {
+            logE('Gửi /shutdown thành công');
             resolve();
         });
 
-        req.on('error', () => resolve());   // Server đã tắt hoặc không phản hồi
+        req.on('error', () => { logE('Lỗi gửi /shutdown (backend đã tắt?)'); resolve(); });
         req.on('timeout', () => { req.destroy(); resolve(); });
         req.end();
     }).then(() => {
@@ -63,25 +141,86 @@ function stopPython() {
     });
 }
 
-function createWindow() {
-    const win = new BrowserWindow({
-        width: 900,
-        height: 720,
+function listDir(dirPath) {
+    try {
+        return fs.readdirSync(dirPath).join(', ');
+    } catch (e) {
+        return `(lỗi đọc thư mục: ${e.message})`;
+    }
+}
+
+const { ipcMain } = require('electron');
+const unlocker = require('./unlocker');
+
+// ── IPC Handlers cho Unlocker & Launch Game ──────────────────────────────────
+ipcMain.handle('get-unlocker-config', async () => {
+    return unlocker.loadUnlockerConfig(app);
+});
+
+ipcMain.handle('save-unlocker-config', async (event, data) => {
+    unlocker.saveUnlockerConfig(data, app);
+    return { ok: true };
+});
+
+ipcMain.handle('launch-game', async (event, gamePath) => {
+    return unlocker.launchGame(gamePath, app);
+});
+
+async function createWindow() {
+    mainWin = new BrowserWindow({
+        width: 1280,
+        height: 768,
+        show: false,   // ẩn cho đến khi backend sẵn sàng
         webPreferences: {
-            // The renderer only uses browser APIs (DOM, fetch, and localStorage).
             nodeIntegration: false,
             contextIsolation: true,
-            sandbox: true
+            sandbox: false,
+            preload: path.join(__dirname, 'preload.js')
         }
     });
 
-    win.loadFile('index.html');
-    win.removeMenu();
+    mainWin.loadFile('db.html');
+    mainWin.removeMenu();
+
+    // Chỉ chặn điều hướng sang trang web bên ngoài (http/https), cho phép chuyển giữa các trang html nội bộ
+    mainWin.webContents.on('will-navigate', (event, url) => {
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            event.preventDefault();
+        }
+    });
+
+    // Bắt lỗi renderer crash
+    mainWin.webContents.on('render-process-gone', (event, details) => {
+        logE(`Renderer crashed: reason=${details.reason}, exitCode=${details.exitCode}`);
+        dialog.showErrorBox('Renderer Crash', `Giao diện bị crash:\nReason: ${details.reason}\nExitCode: ${details.exitCode}\n\nXem log: ${LOG_FILE}`);
+    });
+
+    mainWin.webContents.on('did-fail-load', (event, errorCode, errorDesc, url) => {
+        logE(`did-fail-load: errorCode=${errorCode}, desc=${errorDesc}, url=${url}`);
+    });
+
+    // Chờ backend sẵn sàng trước khi hiện cửa sổ
+    logE('Đang đợi backend sẵn sàng...');
+    try {
+        await waitForBackend(30000, 300);
+        logE('Backend sẵn sàng → hiện cửa sổ');
+        mainWin.show();
+    } catch (err) {
+        logE(`Backend timeout: ${err.message}`);
+        const appdata = process.env.APPDATA || '';
+        const backendStartupLog = path.join(appdata, 'Cryss', 'backend-startup.log');
+        const backendDebugLog   = path.join(appdata, 'Cryss', 'debug.log');
+        const msg = `Backend không khởi động được trong 30 giây.\n\n${err.message}\n\nXem Electron log:\n${LOG_FILE}\n\nXem Backend startup log:\n${backendStartupLog}\n\nXem Backend debug log:\n${backendDebugLog}`;
+        dialog.showErrorBox('Backend Timeout', msg);
+        mainWin.show();   // vẫn show để user thấy UI (dù lỗi)
+    }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    ensureLogDir();
+    logE(`Log file: ${LOG_FILE}`);
     startPython();
-    createWindow();
+    await createWindow();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -91,6 +230,7 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', async () => {
+    logE('window-all-closed → dọn dẹp...');
     await stopPython();
     if (process.platform !== 'darwin') {
         app.quit();
@@ -99,5 +239,6 @@ app.on('window-all-closed', async () => {
 
 // Đảm bảo kill Python khi Electron bị force quit
 app.on('before-quit', () => {
+    logE('before-quit → dọn dẹp...');
     stopPython();
 });

@@ -4,6 +4,7 @@
  */
 const COMBO_ACTIONS = Object.freeze([
     { label: "E", pythonFunction: "skke" },
+    { label: "n2", pythonFunction: "skk2a" },
     { label: "n2d", pythonFunction: "skk2as" },
     { label: "n2c", pythonFunction: "skk2az" },
     { label: "n2cd", pythonFunction: "skk2azs" },
@@ -11,7 +12,8 @@ const COMBO_ACTIONS = Object.freeze([
     { label: "n2q", pythonFunction: "skk2aq" },
     { label: "n3d", pythonFunction: "skk3as" },
     { label: "n3w", pythonFunction: "skk3aw" },
-    { label: "n5d", pythonFunction: "skk5as" }
+    { label: "n5d", pythonFunction: "skk5as" },
+    { label: "n5", pythonFunction: "skk5a" }
 ]);
 
 const ACTION_BY_FUNCTION = new Map(
@@ -32,6 +34,21 @@ const state = {
 };
 
 const elements = {};
+
+// ── Global Browser Navigation Blocker (mouse 3/4) ─────────────────────────────
+['mousedown', 'mouseup', 'click', 'auxclick'].forEach(eventType => {
+    window.addEventListener(eventType, (e) => {
+        if (e.button === 3 || e.button === 4) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
+});
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'BrowserBack' || e.key === 'BrowserForward') {
+        e.preventDefault();
+    }
+}, true);
 
 document.addEventListener("DOMContentLoaded", () => {
     Object.assign(elements, {
@@ -322,23 +339,31 @@ function captureKeyboardHotkey(event) {
 }
 
 function captureMouseHotkey(event) {
+    if (event.button === 0) {
+        if (event.target.closest("button")) {
+            stopHotkeyCapture();
+            return;
+        }
+        return; // Không gán chuột trái làm bind key
+    }
+
+    if (event.button === 2) {
+        event.preventDefault();
+        event.stopPropagation();
+        return; // Không gán chuột phải làm bind key
+    }
+
     event.preventDefault();
     event.stopPropagation();
-    const mouseMap = { 0: "left", 1: "middle", 2: "right" };
+    const mouseMap = { 1: "middle" };
     state.hotkey = mouseMap[event.button] ?? `mouse_${event.button}`;
     
     const preventNextMouseUp = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        window.removeEventListener("mouseup", preventNextMouseUp, true);
     };
-    const preventNextClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        window.removeEventListener("click", preventNextClick, true);
-    };
-    window.addEventListener("mouseup", preventNextMouseUp, true);
-    window.addEventListener("click", preventNextClick, true);
+    window.addEventListener("mouseup", preventNextMouseUp, { capture: true, once: true });
+    window.addEventListener("click", preventNextMouseUp, { capture: true, once: true });
 
     stopHotkeyCapture();
 }
@@ -427,8 +452,8 @@ function hotkeyLabel(hotkey) {
     };
     if (labels[hotkey]) return labels[hotkey];
     if (/^f\d+$/.test(hotkey)) return hotkey.toUpperCase();
-    if (/^mouse_\d+$/.test(hotkey)) return `Mouse${hotkey.slice(6)}`;
-    if (/^mouse\d+$/.test(hotkey)) return `Mouse${hotkey.slice(5)}`;
+    if (/^mouse_\d+$/.test(hotkey)) return `mouse_${hotkey.slice(6)}`;
+    if (/^mouse\d+$/.test(hotkey)) return `mouse_${hotkey.slice(5)}`;
     return hotkey.length === 1 ? hotkey.toUpperCase() : hotkey;
 }
 

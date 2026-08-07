@@ -1,214 +1,179 @@
-* {
-    box-sizing: border-box;
+/* Global styles & theme for src/UIFIX */
+@font-face {
+    font-family: myFont;
+    src: url(assets/Monsterat.ttf)
 }
 
-:root {
-    color-scheme: dark;
-    --background: #090d16;
-    --panel: rgba(19, 27, 43, 0.94);
-    --border: rgba(148, 163, 184, 0.18);
-    --text: #e7edf8;
-    --muted: #8fa0ba;
-    --teal: #2dd4bf;
-    --teal-deep: #0f766e;
+*{
+    font-family: myFont;
 }
 
 body {
     background:
         radial-gradient(circle at 0 0, rgba(45, 212, 191, 0.14), transparent 30rem),
         radial-gradient(circle at 100% 20%, rgba(124, 58, 237, 0.16), transparent 25rem),
-        var(--background);
-    margin: 0;
-    min-height: 100vh;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: var(--text);
+        #090d16;
+    color: #e7edf8;
+    font-family: 'Hanken Grotesk', sans-serif, system-ui;
 }
 
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px 60px;
-    gap: 16px;
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-.logo {
-    text-align: center;
-    color: white;
-    font-size: 50px;
+::-webkit-scrollbar-track {
+    background: rgba(13, 20, 34, 0.6);
 }
 
-.logo img {
-    width: 200px;
-}
-
-.scrolldown {
-    text-align: center;
-    color: white;
-    font-size: 20px;
-    width: 320px;
-}
-
-.scrolldown label {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.scrolldown select {
-    display: block;
-    width: 100%;
-    margin-top: 8px;
-    min-width: 320px;
-    padding: 6px 8px;
-    background-color: rgb(30, 30, 30);
-    color: white;
-    border: 1px solid rgb(0, 141, 141);
-    font-size: 16px;
+::-webkit-scrollbar-thumb {
+    background: rgba(45, 212, 191, 0.3);
     border-radius: 4px;
 }
 
-.fps-section {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    color: rgb(0, 180, 180);
-    width: 320px;
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(45, 212, 191, 0.6);
 }
 
-.fps-section input {
-    background-color: rgb(20, 20, 20);
-    color: rgb(160, 160, 160);
-    border: 1px solid rgb(80, 80, 80);
-    font-size: 13px;
-    padding: 5px 14px;
-    border-radius: 4px;
+/* Clearfix and Box float helpers */
+.boxes-clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
-.fps-section label {
+.box-half-float {
     float: left;
+    width: calc(50% - 16px);
+    min-height: 280px;
+    height: 320px;
+    box-sizing: border-box;
 }
 
-/* Bind Key Widget */
-.bind-key-section {
+/* ── Sidebar action buttons container ───────────────────────────────────── */
+.sidebar-actions {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    width: 320px;
-}
-
-.bind-key-label {
-    color: rgb(0, 180, 180);
-    font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    float: left;
-}
-
-.bind-key-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Default / idle state */
-.bind-key-btn {
-    background-color: rgb(20, 20, 20);
-    color: rgb(160, 160, 160);
-    border: 1px dashed rgb(80, 80, 80);
-    font-size: 13px;
-    padding: 5px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: monospace;
-    transition: all 0.2s ease;
-    min-width: 200px;
-    text-align: left;
-}
-
-/* Listening for key press */
-.bind-key-btn.bind-key-listening {
-    background-color: rgb(40, 20, 0);
-    color: rgb(255, 180, 0);
-    border: 1px solid rgb(255, 180, 0);
-    animation: pulse-listen 0.8s ease-in-out infinite alternate;
-}
-
-/* Key captured (pending save) */
-.bind-key-btn.bind-key-captured {
-    background-color: rgb(0, 40, 40);
-    color: rgb(0, 220, 220);
-    border: 1px solid rgb(0, 141, 141);
-}
-
-@keyframes pulse-listen {
-    from { box-shadow: 0 0 0px rgb(255, 180, 0); }
-    to   { box-shadow: 0 0 8px rgb(255, 180, 0); }
-}
-
-/* Saved badge shown after save */
-.saved-key-badge {
-    background-color: rgb(0, 60, 0);
-    color: rgb(80, 220, 80);
-    border: 1px solid rgb(0, 160, 0);
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-family: monospace;
-}
-
-/* Run Button */
-.run-section {
-    text-align: center;
+    gap: 8px;
+    padding: 12px 16px 20px;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    margin-top: auto;
 }
 
 .run-btn {
-    background-color: rgb(15, 15, 15);
-    color: rgb(100, 100, 100);
-    border: 1px solid rgb(50, 50, 50);
-    font-size: 15px;
-    padding: 8px 20px;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(45, 212, 191, 0.45);
+    background: rgba(45, 212, 191, 0.07);
+    color: rgba(45, 212, 191, 0.85);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
     cursor: pointer;
-    font-family: monospace;
-    letter-spacing: 2px;
-    transition: all 0.2s ease;
-    min-width: 110px;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+}
+
+.run-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(45,212,191,0.18) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
 .run-btn:hover {
-    border-color: rgb(0, 200, 0);
-    color: rgb(0, 200, 0);
+    background: rgba(45, 212, 191, 0.14);
+    border-color: rgba(45, 212, 191, 0.7);
+    color: #2dd4bf;
+    box-shadow: 0 0 16px rgba(45,212,191,0.18);
 }
+
+.run-btn:hover::before { opacity: 1; }
+
+.run-btn:active { transform: scale(0.97); }
 
 .run-btn.run-active {
-    background-color: rgb(0, 50, 0);
-    color: rgb(80, 255, 80);
-    border: 1px solid rgb(0, 200, 0);
-    box-shadow: 0 0 12px rgb(0, 180, 0);
-    animation: pulse-run 1.2s ease-in-out infinite alternate;
+    background: rgba(45, 212, 191, 0.18);
+    border-color: #2dd4bf;
+    color: #2dd4bf;
+    box-shadow: 0 0 20px rgba(45,212,191,0.28), inset 0 0 12px rgba(45,212,191,0.08);
+    animation: runPulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse-run {
-    from { box-shadow: 0 0 6px  rgb(0, 160, 0); }
-    to   { box-shadow: 0 0 18px rgb(0, 220, 0); }
+@keyframes runPulse {
+    0%, 100% { box-shadow: 0 0 16px rgba(45,212,191,0.25); }
+    50%       { box-shadow: 0 0 28px rgba(45,212,191,0.45); }
 }
 
-.button {
-    text-align: center;
-}
-
-.button button {
-    background-color: rgb(0, 141, 141);
-    color: white;
-    font-size: 15px;
-    padding: 8px 16px;
+.start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(124, 58, 237, 0.45);
+    background: rgba(124, 58, 237, 0.07);
+    color: rgba(167, 139, 250, 0.85);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
     cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
 }
 
-.button button:hover {
-    background-color: rgb(0, 170, 170);
+.start-btn:hover {
+    background: rgba(124, 58, 237, 0.14);
+    border-color: rgba(167, 139, 250, 0.7);
+    color: #a78bfa;
+    box-shadow: 0 0 16px rgba(124,58,237,0.22);
+}
+
+.start-btn:active { transform: scale(0.97); }
+
+.start-btn.start-active {
+    background: rgba(124, 58, 237, 0.18);
+    border-color: #a78bfa;
+    color: #a78bfa;
+    box-shadow: 0 0 20px rgba(124,58,237,0.32), inset 0 0 12px rgba(124,58,237,0.1);
+    animation: startPulse 2s ease-in-out infinite;
+}
+
+@keyframes startPulse {
+    0%, 100% { box-shadow: 0 0 16px rgba(124,58,237,0.28); }
+    50%       { box-shadow: 0 0 30px rgba(124,58,237,0.5); }
+}
+
+/* Status dot indicator on buttons */
+.btn-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.run-active .btn-dot,
+.start-active .btn-dot {
+    opacity: 1;
+    animation: dotBlink 1.2s ease-in-out infinite;
+}
+
+@keyframes dotBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
 }

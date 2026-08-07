@@ -1,0 +1,248 @@
+<!doctype html>
+<html class="dark" lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trang chính - Cứt tool</title>
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2dd4bf",
+              secondary: "#2dd4bf",
+              background: "#090d16",
+              surface: "#090d16",
+              "surface-container": "#131b2b",
+              "surface-container-high": "#1a2436",
+              "surface-container-highest": "#222e44",
+              "surface-container-low": "#0d1422",
+              "surface-container-lowest": "#070b12",
+              "on-background": "#e7edf8",
+              "on-surface": "#e7edf8",
+              "on-surface-variant": "#8fa0ba",
+              outline: "rgba(148, 163, 184, 0.18)",
+              "outline-variant": "rgba(148, 163, 184, 0.12)",
+              teal: "#2dd4bf",
+              "teal-deep": "#0f766e",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              base: "4px",
+              sm: "8px",
+              lg: "24px",
+              xs: "4px",
+              "margin-desktop": "40px",
+              "margin-mobile": "16px",
+              "2xl": "48px",
+              "3xl": "64px",
+              gutter: "24px",
+              xl: "32px",
+              md: "16px",
+            },
+            fontFamily: {
+              "body-md": ["Hanken Grotesk", "sans-serif"],
+              "headline-md": ["Hanken Grotesk", "sans-serif"],
+              "label-sm": ["Hanken Grotesk", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- External Stylesheet -->
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md antialiased min-h-screen flex selection:bg-teal selection:text-black"
+  >
+    <aside
+      class="hidden md:flex flex-col bg-surface-container-lowest border-r border-outline/30 fixed left-0 top-0 h-full w-[280px] z-50"
+    >
+      <div class="flex flex-col flex-1 w-full py-6 overflow-y-auto">
+        <div class="px-6 mb-6">
+          <div class="mb-3">
+            <img
+              src="assets/icon.png"
+              alt="Logo"
+              class="w-36 h-auto object-contain drop-shadow-md"
+            />
+          </div>
+          <h1 class="font-headline-md text-teal font-bold tracking-tight">
+            Cứt tool
+          </h1>
+          <p class="font-label-sm text-on-surface-variant mt-1">
+            Giao diện chính
+          </p>
+        </div>
+        <nav class="flex-1 flex flex-col gap-1 px-2">
+          <a
+            class="flex items-center gap-3 px-4 py-3 bg-surface-container-high text-teal border-l-4 border-teal font-label-sm rounded-r-DEFAULT cursor-pointer active:scale-[0.98]"
+            href="db.html"
+          >
+            <span class="material-symbols-outlined">home</span>
+            Trang chính
+          </a>
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 font-label-sm border-l-4 border-transparent rounded-r-DEFAULT cursor-pointer active:scale-[0.98]"
+            href="cb.html"
+          >
+            <span class="material-symbols-outlined">apps</span>
+            Combo
+          </a>
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 font-label-sm border-l-4 border-transparent rounded-r-DEFAULT cursor-pointer active:scale-[0.98]"
+            href="cus.html"
+          >
+            <span class="material-symbols-outlined">settings_suggest</span>
+            Tùy chỉnh
+          </a>
+        </nav>
+      </div>
+      <div class="sidebar-actions">
+        <button id="runBtn" class="run-btn">
+          <span class="btn-dot"></span>
+          <span class="material-symbols-outlined" style="font-size:16px">play_arrow</span>
+          <span id="runBtnLabel">RUN Macro</span>
+        </button>
+        <button id="startBtn" class="start-btn">
+          <span class="btn-dot"></span>
+          <span class="material-symbols-outlined" style="font-size:16px">sports_esports</span>
+          <span id="startBtnLabel">START Game</span>
+        </button>
+      </div>
+    </aside>
+    <main class="flex-1 w-full md:ml-[280px] relative">
+      <div
+        class="sticky top-0 w-full h-[320px] -z-10 overflow-hidden bg-surface-container-lowest"
+        id="hero-container"
+      >
+        <div
+          class="w-full h-full bg-cover bg-center object-cover transform scale-105 transition-transform duration-1000 ease-out"
+          id="hero-image"
+          style="background-image: url(&quot;assets/defbanner.png&quot;)"
+        ></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"
+        ></div>
+      </div>
+      <div
+        class="relative z-10 w-full min-h-screen bg-background rounded-t-[32px] pt-12 pb-32 shadow-[0_-12px_40px_rgba(0,0,0,0.5)] mt-[-40px]"
+      >
+        <div
+          class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop"
+        >
+          <!-- 2 Boxes Layout: Fixed Equal Size & Float Left -->
+          <div class="w-full boxes-clearfix">
+            <div
+              class="bg-surface-container border border-outline/40 rounded-xl p-6 shadow-xl box-half-float"
+              id="boundCombosBox"
+              style="margin-right: 32px"
+            >
+              <h3
+                class="text-lg font-semibold text-teal mb-4 flex items-center gap-2"
+              >
+                <span class="material-symbols-outlined text-teal"
+                  >keyboard</span
+                >
+                Combo đang bind phím
+              </h3>
+              <div
+                class="flex flex-col gap-2 overflow-y-auto max-h-[230px] pr-1"
+                id="boundCombosList"
+              >
+                <div
+                  class="text-on-surface-variant/60 text-sm py-4 text-center"
+                >
+                  Đang tải cấu hình...
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-surface-container border border-outline/40 rounded-xl p-6 shadow-xl box-half-float flex flex-col justify-between"
+              id="statusFpsBox"
+            >
+              <div>
+                <h3
+                  class="text-lg font-semibold text-teal mb-4 flex items-center gap-2"
+                >
+                  <span class="material-symbols-outlined text-teal"
+                    >settings</span
+                  >
+                  Cấu hình Macro & Backend
+                </h3>
+
+                <!-- Macro FPS Input -->
+                <div class="mb-5">
+                  <label
+                    for="macroFpsInput"
+                    class="block text-sm font-medium text-on-surface-variant mb-1.5"
+                  >
+                    Macro FPS
+                  </label>
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="number"
+                      id="macroFpsInput"
+                      min="1"
+                      max="1000"
+                      value="120"
+                      class="bg-surface-container-high border border-outline/40 text-on-surface rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:border-teal font-mono font-semibold"
+                    />
+                    <button
+                      type="button"
+                      id="saveFpsBtn"
+                      class="bg-teal/15 hover:bg-teal/25 text-teal border border-teal/40 rounded-lg px-3 py-2 text-xs font-semibold transition-colors active:scale-95"
+                    >
+                      Lưu FPS
+                    </button>
+                  </div>
+                  <p id="fpsSaveMsg" class="text-xs mt-1.5 text-teal h-4 font-medium"></p>
+                </div>
+
+                <!-- Backend Status Label -->
+                <div>
+                  <span
+                    class="block text-sm font-medium text-on-surface-variant mb-1.5"
+                  >
+                    Trạng thái Backend Python
+                  </span>
+                  <div
+                    id="backendStatusBadge"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all bg-white/5 text-on-surface-variant border-outline/30"
+                  >
+                    <span id="backendStatusDot" class="w-2 h-2 rounded-full bg-gray-400"></span>
+                    <span id="backendStatusText">Đang kiểm tra...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- External JavaScript -->
+    <script src="shared.js"></script>
+    <script src="db.js"></script>
+  </body>
+</html>

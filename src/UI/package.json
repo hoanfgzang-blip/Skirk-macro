@@ -31,6 +31,10 @@
         {
           "from": "../../build/dist/Cryss.exe",
           "to": "Cryss.exe"
+        },
+        {
+          "from": "../unlocker",
+          "to": "unlocker"
         }
       ]
     },
@@ -48,17 +52,22 @@
     "files": [
       "index.html",
       "main.js",
-      "fe.js",
-      "style.css",
-      "icon.png",
-      "nav.css",
-      "nav.js",
+      "preload.js",
+      "shared.js",
+      "unlocker.js",
+      "db.html",
+      "db.js",
+      "cb.html",
+      "cb.js",
+      "cus.html",
+      "cus.js",
       "cuscombo.html",
       "cuscombo.css",
       "cuscombo.js",
-      "manage.html",
-      "manage.css",
-      "manage.js"
+      "style.css",
+      "icon.png",
+      "logo.png",
+      "assets/**/*"
     ]
   },
   "keywords": [],
@@ -68,5 +77,8 @@
   "devDependencies": {
     "electron": "^43.1.0",
     "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "ini": "^7.0.0"
   }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Quản lý Combo | Skirk Macro</title>
+    <link rel="stylesheet" href="nav.css">
+    <link rel="stylesheet" href="manage.css">
+</head>
+<body>
+    <main class="manage-app">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">SKIRK MACRO / QUẢN LÝ</p>
+                <h1>Custom Combo đã lưu</h1>
+                <p class="subtitle">Xem, chỉnh sửa và xóa các combo bạn đã tạo.</p>
+            </div>
+            <a href="cuscombo.html" class="primary-button" id="createNewBtn">+ Tạo Combo mới</a>
+        </header>
+
+        <div id="comboList" class="combo-list"></div>
+        <div id="emptyState" class="empty-state" hidden>
+            <span class="empty-icon">📭</span>
+            <p>Chưa có Custom Combo nào.</p>
+            <a href="cuscombo.html" class="primary-button">Tạo Combo đầu tiên</a>
+        </div>
+
+        <!-- Delete confirmation modal -->
+        <div id="deleteModal" class="modal-overlay" hidden>
+            <div class="modal">
+                <h3>Xóa Combo?</h3>
+                <p id="deleteModalText">Bạn có chắc muốn xóa combo này?</p>
+                <div class="modal-actions">
+                    <button id="cancelDelete" class="secondary-button" type="button">Hủy</button>
+                    <button id="confirmDelete" class="danger-button" type="button">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="nav.js"></script>
+    <script src="manage.js"></script>
+</body>
+</html>

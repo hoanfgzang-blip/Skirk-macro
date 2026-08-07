@@ -1,46 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=db.html">
     <title>Skirk Macro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="nav.css">
+    <script>
+        window.location.href = "db.html";
+    </script>
 </head>
 <body>
-    <div class="logo">
-        <img src="icon.png" alt="Logo">
-    </div>
-
-    <div class="scrolldown">
-        <label for="chooseTb">Chọn 1 combo</label>
-        <select name="Combo" id="chooseTb"></select>
-    </div>
-    <div class="fps-section">
-        <label for="FPS">FPS</label>
-        <input type="number" id="FPS" name="FPS" min="1" max="1000" value="120">
-    </div>
-    <!-- NEW: Bind Key Widget -->
-    <div class="bind-key-section">
-        <label class="bind-key-label" for="bindKeyBtn">Sign Key (bind key)</label>
-        <div class="bind-key-row">
-            <button id="bindKeyBtn" class="bind-key-btn" type="button">Click to bind a key...</button>
-            <span id="savedKeyBadge" class="saved-key-badge" style="display:none;"></span>
-        </div>
-    </div>
-
-    <!-- NEW: Run Button -->
-    <div class="run-section">
-        <button id="runBtn" class="run-btn" type="button">▶ RUN</button>
-    </div>
-
-    <div class="button">
-        <button id="saveBtn" type="button">SAVE</button>
-    </div>
-
-    
-
-    <script src="nav.js"></script>
-    <script src="./fe.js"></script>
 </body>
 </html>
